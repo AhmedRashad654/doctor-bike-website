@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "./../globals.css";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
@@ -7,6 +6,8 @@ import { getTranslations } from "next-intl/server";
 import { Almarai, Noto_Serif } from "next/font/google";
 import { Alef } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import type { Metadata } from "next";
+type Params = Promise<{ locale: string }>;
 
 const almarai = Almarai({
   subsets: ["arabic"],
@@ -29,10 +30,11 @@ const alef = Alef({
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: string };
+  params: Params;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale });
+  const t = await getTranslations({ locale });
+
   return {
     title: t("meta.title"),
     description: t("meta.description"),
@@ -47,7 +49,7 @@ export default async function LocaleLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Params;
 }) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
@@ -68,7 +70,7 @@ export default async function LocaleLayout({
       dir={locale === "ar" ? "rtl" : "ltr"}
       suppressHydrationWarning
     >
-      <body className={`${fontClass}`}>
+      <body className={`${fontClass} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
