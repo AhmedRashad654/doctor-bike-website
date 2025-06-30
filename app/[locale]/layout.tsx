@@ -7,24 +7,30 @@ import { Almarai, Noto_Serif } from "next/font/google";
 import { Alef } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import type { Metadata } from "next";
+import Navbar from "@/components/homePage/Navbar/Navbar";
+import Footer from "@/components/homePage/Footer/Footer";
+
 type Params = Promise<{ locale: string }>;
 
 const almarai = Almarai({
   subsets: ["arabic"],
   weight: ["400", "700"],
   display: "swap",
+  preload: true,
 });
 
 const noto = Noto_Serif({
   subsets: ["latin"],
   weight: ["400", "700"],
   display: "swap",
+  preload: true,
 });
 
 const alef = Alef({
   subsets: ["hebrew"],
   weight: ["400"],
   display: "swap",
+  preload: true,
 });
 
 export async function generateMetadata({
@@ -67,7 +73,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      dir={locale === "ar" ? "rtl" : "ltr"}
+      className={locale === "ar" ? "rtl" : "ltr"}
       suppressHydrationWarning
     >
       <body className={`${fontClass} antialiased`}>
@@ -77,7 +83,11 @@ export default async function LocaleLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          <NextIntlClientProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </NextIntlClientProvider>
         </ThemeProvider>
       </body>
     </html>

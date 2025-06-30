@@ -1,0 +1,82 @@
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #444;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 750px;
+  object-fit: cover;
+}
+.swiper-slide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgba(103, 103, 174, 0.5),
+    rgba(5, 5, 5, 0.5)
+  );
+  z-index: 1;
+}
+
+.swiper-navigation {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  background-color: var(--transperants) !important;
+  border-radius: 50%;
+  width: 30px !important;
+  height: 30px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 14px !important;
+  color: var(--link-active);
+  font-weight: 900 !important;
+}
+
+.swiper-button-prev {
+  left: 10px;
+}
+
+.swiper-button-next {
+  right: 10px;
+}
+
+.swiper-pagination {
+  position: absolute !important ;
+  bottom: 240px !important;
+  transition: 0.5s all;
+}
+.swiper-pagination-bullet {
+  border: 2px solid white !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: white !important;
+}

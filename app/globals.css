@@ -43,6 +43,8 @@
   --color-link-inactive: var(--link-inactive);
   --color-hero-text: var(--hero-text);
   --color-section-header: var(--section-header);
+  --color-transperants: var(--transperants);
+  --color-card: var(--card);
 }
 
 :root {
@@ -82,6 +84,8 @@
   --link-inactive: #7b7b7b;
   --hero-text: #ffffff;
   --section-header: #151a33;
+  --transperants: white;
+  --card: #eeeeee;
 }
 
 .dark {
@@ -116,10 +120,12 @@
   --sidebar-accent-foreground: oklch(0.985 0.002 247.839);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
-  --link-active: #b9e6a6;
+  --link-active: white;
   --link-inactive: #b3b3b3;
   --hero-text: #ffffff;
   --section-header: #d4d9e8;
+  --transperants: #111827;
+  --card: oklch(18.168% 0.03632 267.996);
 }
 
 @layer base {
@@ -129,4 +135,15 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html.ltr {
+  direction: ltr;
+}
+html.rtl {
+  direction: rtl;
+}
+
+.shadow-button-footer {
+  box-shadow: 2px -2px 41px 38px rgba(230, 229, 229, 0.41);
 }
