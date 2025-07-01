@@ -4,10 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import slide1 from "@/public/slide1.jpg";
 import slide2 from "@/public/slide2.jpg";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import Image from "next/image";
 import {
   NavigationOptions,

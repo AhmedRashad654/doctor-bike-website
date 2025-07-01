@@ -1,7 +1,9 @@
-import CardProduct from "@/components/homePage/ProductMoreSales/CardProduct";
+import PartProducts from "@/components/homePage/ProductMoreSales/PartProducts";
 import React from "react";
 export type Params = Promise<{ id: string }>;
-export type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+export type SearchParams = Promise<{
+  [key: string]: string | string[] | undefined;
+}>;
 
 export default async function Products({
   params,
@@ -23,11 +25,7 @@ export default async function Products({
           </h4>
           <div className="absolute bg-link-active/20 w-[100px] h-[20px] z-10 bottom-0 top-1/2 left-0"></div>
         </div>
-        <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 w-full justify-between">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((e, i) => (
-            <CardProduct key={i} index={i} type="forSub" />
-          ))}
-        </div>
+        <PartProducts type={subCategory} />
       </div>
     </div>
   );

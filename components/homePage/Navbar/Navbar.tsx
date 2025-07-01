@@ -10,8 +10,8 @@ import { ChartBarStacked } from "lucide-react";
 
 export default function Navbar() {
   return (
-    <nav className="w-full px-6 fixed top-8 left-0 right-0 z-50">
-      <div className="p-3 rounded-xl shadow-md max-w-7xl mx-auto bg-transperants flex justify-between items-center">
+    <nav className="w-full px-6 fixed top-8 left-0 right-0 z-50 flex justify-center">
+      <div className="p-3 rounded-xl shadow-md w-full max-w-7xl bg-transperants flex justify-between items-center">
         <div className="flex items-center gap-3 md:gap-5 ">
           <h6 className="text-lg font-bold text-link-active cursor-pointer hidden md:block hover:text-black dark:hover:text-blue-400">
             الرئيسية

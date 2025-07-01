@@ -8,25 +8,35 @@ import prodictImage from "@/public/product.png";
 import { ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
+import { useParams } from "next/navigation";
 
 export default function CardProduct({
   index,
   type,
 }: {
   index: number;
-  type?: string;
+  type?: string | string[];
 }) {
   const locale = useLocale();
+  const params = useParams();
+  const id = params.id;
+  
   return (
-    <Link href={`/product/${index}`}>
+    <Link
+      href={
+        type
+          ? `/product/${index}?subCategoryName=${type}&subCategoryId=${id}`
+          : `/product/${index}`
+      }
+    >
       <motion.div
-        initial={{ opacity: 0, x: locale === "ar" ? -50 : 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: (index + 1) * 0.4 }}
-        viewport={{ once: true, amount: 0.2 }}
+        variants={{
+          hidden: { opacity: 0, x: locale === "ar" ? -50 : 50 },
+          show: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+        }}
         className={cn(
           "min-h-[200px] bg-card rounded-lg flex flex-col gap-2 p-3",
-          type === "forSub" && "dark:bg-gray-800"
+          type && "dark:bg-gray-800"
         )}
       >
         <div className="flex flex-end">

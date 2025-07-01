@@ -23,10 +23,10 @@ export default function CardMainCategory({
       }
     >
       <motion.div
-        initial={{ opacity: 0, x: locale === "ar" ? -50 : 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: (index + 1) * 0.4 }}
-        viewport={{ once: true, amount: 0.2 }}
+        variants={{
+          hidden: { opacity: 0, x: locale === "ar" ? -50 : 50 },
+          show: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+        }}
         className="min-h-[200px] relative bg-white dark:bg-gray-800 rounded-lg flex flex-col gap-2 group"
       >
         <Image

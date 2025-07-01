@@ -9,6 +9,9 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import type { Metadata } from "next";
 import Navbar from "@/components/homePage/Navbar/Navbar";
 import Footer from "@/components/homePage/Footer/Footer";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 type Params = Promise<{ locale: string }>;
 
@@ -84,9 +87,11 @@ export default async function LocaleLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider>
-            <Navbar />
-            {children}
-            <Footer />
+            <div className="max-w-[100vw] overflow-x-hidden">
+              <Navbar />
+              {children}
+              <Footer />
+            </div>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

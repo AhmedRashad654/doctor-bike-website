@@ -1,7 +1,7 @@
 import React from "react";
-import CardProduct from "./CardProduct";
 import ButtonPagination from "@/components/pagination/ButtonBagination";
 import TriangleProduct from "./TriangleProduct";
+import PartProducts from "./PartProducts";
 
 export default function ProductMoreSales() {
   return (
@@ -14,12 +14,7 @@ export default function ProductMoreSales() {
             </h4>
             <div className="absolute bg-link-active/20 w-[150px] h-[20px] -z-10 bottom-0 top-1/2 left-0"></div>
           </div>
-
-          <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 w-full justify-between">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 6].map((e, i) => (
-              <CardProduct key={i} index={i} />
-            ))}
-          </div>
+          <PartProducts />
           <div className="flex justify-end w-full">
             <ButtonPagination meta={{ totalPages: 6 }} />
           </div>
