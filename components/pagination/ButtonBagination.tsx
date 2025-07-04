@@ -26,7 +26,7 @@ export default function ButtonPagination({
   };
 
   return (
-    <div className="mt-5 flex items-center gap-3 justify-center">
+    <div className="mt-5 flex items-center gap-3">
       {/* Prev */}
       <div
         onClick={() => handlePageChange(currentPage - 1)}

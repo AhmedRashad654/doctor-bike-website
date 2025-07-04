@@ -8,4 +8,5 @@ export interface IUser {
   city: string;
   address: string;
   oldPassword: string;
+  code: string;
 }

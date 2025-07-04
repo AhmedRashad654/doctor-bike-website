@@ -20,7 +20,7 @@ export default function CardProduct({
   const locale = useLocale();
   const params = useParams();
   const id = params.id;
-  
+
   return (
     <Link
       href={
@@ -72,7 +72,7 @@ export default function CardProduct({
         </div>
         <div className="w-full flex items-center justify-between gap-2">
           <p className="text-sm"> متبقي 3 قطع</p>
-          <button className="flex items-center gap-2 bg-link-active dark:bg-link-active/20 text-center py-1 px-3 text-white rounded-md font-bold text-sm cursor-pointer">
+          <button className="flex items-center gap-2 bg-link-active dark:bg-link-active/20 text-center py-1 px-3 text-white rounded-md font-bold text-sm cursor-pointer hover:scale-[1.2] transition duration-300">
             اضافة
             <ShoppingCart className="w-4 h-4" />
           </button>

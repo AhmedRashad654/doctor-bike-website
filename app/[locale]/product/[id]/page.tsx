@@ -2,9 +2,9 @@ import React from "react";
 import PartBack from "../componant/PartBack";
 import ImagesProduct from "../componant/ImagesProduct";
 import { FaWhatsapp } from "react-icons/fa6";
-import IncreaseAndDecrease from "../componant/IncreaseAndDecrease";
 import PartAddComment from "../componant/PartAddComment";
 import PartDisplayComments from "../componant/PartDisplayComments";
+import WrapIncreaseAndDecrease from "../componant/WrapIncreaseAndDecrease";
 
 export default function Product() {
   return (
@@ -24,11 +24,11 @@ export default function Product() {
             </p>
           </div>
           <div className="flex justify-between items-center gap-3">
-            <div className="border-2 border-green-500 rounded-md flex items-center gap-2 py-1 px-6 md:px-10  cursor-pointer transition duration-300 hover:scale-[1.1] ">
+            <div className="border-2 border-green-500 rounded-md flex items-center gap-2 py-1 px-6 md:px-10  cursor-pointer ">
               <p className="text-green-500">اسال عن المنتج</p>
               <FaWhatsapp className="text-green-500 text-xl" />
             </div>
-            <IncreaseAndDecrease />
+            <WrapIncreaseAndDecrease />
           </div>
           <PartAddComment />
           <PartDisplayComments />

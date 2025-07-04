@@ -1,13 +1,13 @@
 import React from "react";
 import { ChevronDown } from "lucide-react";
 import { UserRound } from "lucide-react";
-import { ShoppingCart } from "lucide-react";
 import { ToggleTheme } from "@/components/theme/ToggleTheme";
 import LanguageSwitcher from "@/components/language/LanguageSwitcher";
 import LogoImage from "./LogoImage";
 import { House } from "lucide-react";
 import { ChartBarStacked } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import PartIconCartAndLength from "./PartIconCartAndLength";
 
 export default function Navbar() {
   return (
@@ -39,7 +39,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3 md:gap-5 text-link-active">
           <LanguageSwitcher />
           <ToggleTheme />
-          <ShoppingCart className="cursor-pointer hover:text-black dark:hover:text-blue-400 transition duration-300" />
+          <PartIconCartAndLength />
           <Link href={"/sign-in"}>
             <UserRound className="cursor-pointer hover:text-black dark:hover:text-blue-400 transition duration-300" />
           </Link>

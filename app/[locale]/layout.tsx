@@ -8,10 +8,11 @@ import { Alef } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import type { Metadata } from "next";
 import Navbar from "@/components/homePage/Navbar/Navbar";
-import Footer from "@/components/homePage/Footer/Footer";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { CartProvider } from "@/context/CartContext";
+import { Toaster } from "@/components/ui/sonner";
 
 type Params = Promise<{ locale: string }>;
 
@@ -87,11 +88,13 @@ export default async function LocaleLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider>
-            <div className="max-w-[100vw] overflow-x-hidden">
-              <Navbar />
-              {children}
-              <Footer />
-            </div>
+            <CartProvider>
+              <main className="max-w-[100vw] overflow-x-hidden">
+                <Navbar />
+                {children}
+              </main>
+              <Toaster position="top-center" />
+            </CartProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
