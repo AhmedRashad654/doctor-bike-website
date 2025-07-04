@@ -7,13 +7,13 @@ import Image from "next/image";
 import apple from "@/public/apple.png";
 import googlePlay from "@/public/google play.png";
 import { motion } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 export default function Footer() {
   const locale = useLocale();
   const pathname = usePathname();
-
+  const t = useTranslations("home.footer");
   return (
     <div
       className={cn(
@@ -47,7 +47,7 @@ export default function Footer() {
                   href="/contact-us"
                   className="text-white text-2xl font-bold text-decoration-underline"
                 >
-                  اتصل بنا
+                  {t("contact")}
                 </Link>
               </motion.div>
               <motion.div
@@ -60,7 +60,7 @@ export default function Footer() {
                   href="/about"
                   className="text-white text-2xl font-bold text-decoration-underline"
                 >
-                  من نحن
+                  {t("about")}
                 </Link>
               </motion.div>
               <motion.div
@@ -73,7 +73,7 @@ export default function Footer() {
                   href="/terms-policy"
                   className="text-white text-2xl font-bold text-decoration-underline"
                 >
-                  الشروط و الاحكام
+                  {t("terms")}
                 </Link>
               </motion.div>
             </div>
@@ -86,7 +86,7 @@ export default function Footer() {
               className="flex flex-col gap-3 md:items-center"
             >
               <h4 className="text-white text-2xl font-bold">
-                متوفر الان تطبيق للشركة
+                {t("provideNow")}
               </h4>
               <div className="flex flex-row gap-2">
                 <a href="#">

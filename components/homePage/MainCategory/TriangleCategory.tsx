@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 
-export default function TriangleProduct() {
+export default function TriangleCategory() {
   return (
     <div className="relative w-full h-[100px]">
       <div

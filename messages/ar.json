@@ -4,6 +4,44 @@
     "description": "اكتشف مجموعة مميزة من الدراجات الهوائية عالية الجودة لجميع الأعمار بأسعار تنافسية."
   },
   "home": {
-    "title": "مرحبا بالعالم"
+    "heroSection": {
+      "title": "شركة دكتور بايك",
+      "description": "لكل ما يخص الدراجات الكهربائية والنارية",
+      "followUs": "تابعونا علي ",
+      "explation": "لاستفساراتكم علي"
+    },
+    "navbar": {
+      "home": " الرئيسية",
+      "category": " الاقسام",
+      "english": "الانجليزية",
+      "arabic": "العربية",
+      "hebrew": "العبرية"
+    },
+    "mainCategory": {
+      "category": "الاقسام"
+    },
+    "productMoreSales": {
+      "moreSales": "المنتجات الأكثر مبيعا",
+      "discount": "خصم",
+      "add": "اضافة  ",
+      "reset": "متبقي ",
+      "peace": "قطع"
+    },
+    "footer":{
+      "contact": "اتصل بنا",
+      "about": "من نحن",
+      "terms": "الشروط والاحكام",
+      "provideNow": "متوفر الان تطبيق للشركة "
+    }
+  },
+  "singleProduct":{
+    "detailsProduct": "تفاصيل المنتج",
+    "addtoCart": "اضافة الى عربة التسوق",
+    "removeFromCart":"ازالة من عربة التسوق",
+    "askAboutProduct":"أسال عن المنتج",
+    "reset": "متبقي ",
+    "peace": "قطعة",
+    "addOpinion":"اضافة راي ...",
+    "chekal":"شيكل"
   }
 }

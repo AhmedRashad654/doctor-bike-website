@@ -4,6 +4,44 @@
     "description": "Explore a wide range of high-quality bicycles for all ages at competitive prices."
   },
   "home": {
-    "title": "hello world"
+    "heroSection": {
+      "title": "Dr. Bike Company",
+      "description": "Everything related to electric and motorbikes",
+      "followUs": "Follow us on",
+      "explation": "For your inquiries at"
+    },
+    "navbar": {
+      "home": "Home",
+      "category": "Categories",
+      "english": "English",
+      "arabic": "Arabic",
+      "hebrew": "Hebrew"
+    },
+    "mainCategory": {
+      "category": "Categories"
+    },
+    "productMoreSales": {
+      "moreSales": "Best Selling Products",
+      "discount": "Discount",
+      "add": "Add",
+      "reset": "Remaining",
+      "peace": "Pieces"
+    },
+    "footer": {
+      "contact": "Contact Us",
+      "about": "About Us",
+      "terms": "Terms & Conditions",
+      "provideNow": "Company app now available"
+    }
+  },
+  "singleProduct": {
+    "detailsProduct": "Product Details",
+    "addtoCart": "Add to Cart",
+    "removeFromCart": "Remove from Cart",
+    "askAboutProduct": "Ask about the product",
+    "reset": "Remaining",
+    "peace": "Piece",
+    "addOpinion": "Add a comment...",
+    "chekal": "Shekel"
   }
 }

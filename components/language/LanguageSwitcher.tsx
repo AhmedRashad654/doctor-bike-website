@@ -8,9 +8,10 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function LanguageSwitcher() {
+  const t = useTranslations("home.navbar")
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -30,19 +31,19 @@ export default function LanguageSwitcher() {
           checked={locale === "en"}
           onCheckedChange={() => handleChange("en")}
         >
-          English
+          {t("english")}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={locale === "ar"}
           onCheckedChange={() => handleChange("ar")}
         >
-          Arabic
+          {t("arabic")}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={locale === "he"}
           onCheckedChange={() => handleChange("he")}
         >
-          Hebrew
+          {t("hebrew")}
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>

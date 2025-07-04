@@ -6,10 +6,11 @@ import tiktok from "@/public/logos_tiktok-icon.png";
 import whatsapp from "@/public/logos_whatsapp-icon.png";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function FooterHeaderSection() {
   const locale = useLocale();
+  const t = useTranslations("home.heroSection");
   return (
     <div className="w-full px-4 z-10 absolute bottom-[120px]">
       <div className="flex flex-wrap justify-center sm:justify-between items-center gap-3 max-w-7xl mx-auto">
@@ -20,7 +21,7 @@ export default function FooterHeaderSection() {
           className="flex items-center justify-center gap-4 px-4"
         >
           <h6 className="text-transperants dark:text-gray-200/80 text-lg font-semibold">
-            تابعونا علي
+            {t("followUs")}
           </h6>
           <div className="flex items-center gap-3 p-3">
             <Image
@@ -53,7 +54,7 @@ export default function FooterHeaderSection() {
           className="flex items-center gap-3"
         >
           <h6 className="text-transperants dark:text-gray-200/80 text-lg font-semibold">
-            لاستفساراتكم علي
+            {t("explation")}
           </h6>
           <Image
             src={whatsapp}

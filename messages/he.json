@@ -4,6 +4,44 @@
     "description": "גלו מגוון רחב של אופניים איכותיים לכל הגילאים במחירים תחרותיים."
   },
   "home": {
-    "title": "hhyyyyh.''y'y;yu'''''yy;;;u;u"
+    "heroSection": {
+      "title": "חברת דוקטור בייק",
+      "description": "הכול על אופניים חשמליים ואופנועים",
+      "followUs": "עקבו אחרינו ב־",
+      "explation": "לשאלותיכם ב־"
+    },
+    "navbar": {
+      "home": "דף הבית",
+      "category": "קטגוריות",
+      "english": "אנגלית",
+      "arabic": "ערבית",
+      "hebrew": "עברית"
+    },
+    "mainCategory": {
+      "category": "קטגוריות"
+    },
+    "productMoreSales": {
+      "moreSales": "המוצרים הנמכרים ביותר",
+      "discount": "הנחה",
+      "add": "הוסף",
+      "reset": "נשארו",
+      "peace": "יחידות"
+    },
+    "footer": {
+      "contact": "צור קשר",
+      "about": "אודותינו",
+      "terms": "תנאים והגבלות",
+      "provideNow": "אפליקציית החברה זמינה כעת"
+    }
+  },
+  "singleProduct": {
+    "detailsProduct": "פרטי המוצר",
+    "addtoCart": "הוסף לעגלה",
+    "removeFromCart": "הסר מהעגלה",
+    "askAboutProduct": "שאל על המוצר",
+    "reset": "נשארו",
+    "peace": "יחידה",
+    "addOpinion": "הוסף חוות דעת...",
+    "chekal": "שקל "
   }
 }

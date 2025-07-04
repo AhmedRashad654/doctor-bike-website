@@ -27,7 +27,7 @@ export default function CardMainCategory({
           hidden: { opacity: 0, x: locale === "ar" ? -50 : 50 },
           show: { opacity: 1, x: 0, transition: { duration: 0.5 } },
         }}
-        className="min-h-[200px] relative bg-white dark:bg-gray-800 rounded-lg flex flex-col gap-2 group"
+        className="min-h-[200px] relative bg-card dark:bg-gray-800 rounded-lg flex flex-col gap-2 group"
       >
         <Image
           src={category}
