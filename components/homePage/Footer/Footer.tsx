@@ -8,11 +8,25 @@ import apple from "@/public/apple.png";
 import googlePlay from "@/public/google play.png";
 import { motion } from "framer-motion";
 import { useLocale } from "next-intl";
+import { usePathname } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
 export default function Footer() {
   const locale = useLocale();
+  const pathname = usePathname();
+
   return (
     <div
-      className="w-full  h-[400px] bg-cover bg-center relative"
+      className={cn(
+        "w-full  h-[400px] bg-cover bg-center relative",
+        (pathname.includes("/sign-in") ||
+          pathname.includes("/sign-up") ||
+          pathname.includes("/forget-password") ||
+          pathname.includes("/otp") ||
+          pathname.includes("/success-otp") ||
+          pathname.includes("/change-password") ||
+          pathname.includes("/user")) &&
+          "hidden"
+      )}
       style={{
         backgroundImage: `url(${slide1.src})`,
       }}
@@ -30,7 +44,7 @@ export default function Footer() {
                 viewport={{ once: true, amount: 0.2 }}
               >
                 <Link
-                  href="/"
+                  href="/contact-us"
                   className="text-white text-2xl font-bold text-decoration-underline"
                 >
                   اتصل بنا
@@ -43,7 +57,7 @@ export default function Footer() {
                 viewport={{ once: true, amount: 0.2 }}
               >
                 <Link
-                  href="/"
+                  href="/about"
                   className="text-white text-2xl font-bold text-decoration-underline"
                 >
                   من نحن
@@ -56,7 +70,7 @@ export default function Footer() {
                 viewport={{ once: true, amount: 0.2 }}
               >
                 <Link
-                  href="/"
+                  href="/terms-policy"
                   className="text-white text-2xl font-bold text-decoration-underline"
                 >
                   الشروط و الاحكام
