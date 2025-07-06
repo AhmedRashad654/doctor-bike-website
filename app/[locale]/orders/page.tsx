@@ -170,7 +170,7 @@ export default function Orders() {
         onClose={closeDialog}
         confirmCancel={confirmCancel}
       />
-      <ButtonPagination meta={{ totalPages: 6 }} />
+      <ButtonPagination totalPages={6} />
     </div>
   );
 }
