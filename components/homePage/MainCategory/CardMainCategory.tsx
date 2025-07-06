@@ -1,16 +1,17 @@
 "use client";
-import { useLocale } from "next-intl";
 import Image from "next/image";
 import React from "react";
-import category from "@/public/category.jpg";
-import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
+import { IMainCategory } from "@/types/mainCateroty/IMainCategory";
+import { url } from "@/axios/axios";
+import { useLocale } from "next-intl";
+import { ISubCategory } from "@/types/subCategory/ISubCategory";
 
 export default function CardMainCategory({
-  index,
+  category,
   type,
 }: {
-  index: number;
+  category: IMainCategory | ISubCategory;
   type: string;
 }) {
   const locale = useLocale();
@@ -18,37 +19,49 @@ export default function CardMainCategory({
     <Link
       href={
         type === "main"
-          ? `/sub-category/${index}?MainCategoryName=ضواو وكبسات ومزامير`
-          : `/products/${index}?subCategoryName=ضواو وكبسات ومزامير`
+          ? `/sub-category/${category?.id}?MainCategoryNameEng=${category?.nameEng}&MainCategoryNameAr=${category?.nameAr}&MainCategoryNameAbree=${category?.nameAbree}`
+          : `/products/${category?.id}?subCategoryNameEng=${category?.nameEng}&subCategoryNameAr=${category?.nameAr}&subCategoryNameAbree=${category?.nameAbree}`
       }
     >
-      <motion.div
-        variants={{
-          hidden: { opacity: 0, x: locale === "ar" ? -50 : 50 },
-          show: { opacity: 1, x: 0, transition: { duration: 0.5 } },
-        }}
-        className="min-h-[200px] relative bg-card dark:bg-gray-800 rounded-lg flex flex-col gap-2 group"
-      >
+      <div className="min-h-[250px] 2xl:min-h-[200px] xl:min-h-[220px] relative bg-card dark:bg-gray-800 rounded-lg flex flex-col gap-2 group h-full">
         <Image
-          src={category}
+          src={`${url}${category?.imageUrl}`}
           alt="prodictImage"
           width={100}
           height={100}
-          className="h-[190px] w-full rounded-t-lg"
+          className="2xl:h-[190px] xl:h-[210px] h-[240px] w-full rounded-t-lg"
         />
 
         <div className="w-full flex items-center justify-center px-3 pb-2">
-          <h4 className="font-bold center">ضواو وكبسات ومزامير </h4>
+          <h4 className="font-bold text-center">
+            {
+              category[
+                locale === "en"
+                  ? "nameEng"
+                  : locale === "ar"
+                  ? "nameAr"
+                  : "nameAbree"
+              ]
+            }{" "}
+          </h4>
         </div>
         <div
           className="absolute bg-blue-300 rounded-lg w-full h-full z-0 top-0 left-0 
         scale-0 group-hover:scale-100 transition-transform duration-500 origin-center flex justify-center items-center p-2"
         >
           <h4 className="text-2xl font-bold text-center text-white">
-            ضواو وكبسات ومزامير{" "}
+            {
+              category[
+                locale === "en"
+                  ? "nameEng"
+                  : locale === "ar"
+                  ? "nameAr"
+                  : "nameAbree"
+              ]
+            }
           </h4>
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 }

@@ -18,7 +18,7 @@ export const RegisterUser = async (data: IUser, toast: ToastType) => {
     if (response?.status === 200) {
       toast.success("تم انشاء حساب بنجاح");
       return response;
-    } 
+    }
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       toast.error(error?.response?.data?.message);
@@ -70,7 +70,10 @@ export const ForgetPasswordUser = async (data: IUser, toast: ToastType) => {
 };
 
 // change password
-export const ChangePasswordUserApi = async (newData: IUser, toast: ToastType) => {
+export const ChangePasswordUserApi = async (
+  newData: IUser,
+  toast: ToastType
+) => {
   try {
     const response = await request.patch(
       `/Auth/ChangePasswordToForgot`,
@@ -106,3 +109,25 @@ export const UpdateProfileUser = async (newData: IUser, toast: ToastType) => {
   }
 };
 
+// change password user login
+export const ChangePasswordUserLoginApi = async (
+  newData: IUser,
+  toast: ToastType
+) => {
+  try {
+    const response = await request.post(`/Auth/ChangePassword`, newData);
+    if (response?.status === 200) {
+      toast.success("تم تغيير كلمة المرور بنجاح");
+      return response;
+    } else {
+      return null;
+    }
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      console.log(error);
+      toast.error(
+        error?.response?.data?.exception?.Message || "error in change password"
+      );
+    }
+  }
+};

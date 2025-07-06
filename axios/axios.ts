@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 export const request = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
-
+export const url = process.env.NEXT_PUBLIC_API_URL;
 request.interceptors.request.use(
   (config) => {
     const token = Cookies.get("token_doctor_bike_website");

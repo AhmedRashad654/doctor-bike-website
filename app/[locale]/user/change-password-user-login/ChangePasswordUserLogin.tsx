@@ -4,50 +4,44 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-
-// import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-// import { setUser } from "../../../redux/features/userSlice";
 import { IUser } from "@/types/user/IUser";
-
-export default function ChangePasswordUser() {
-  //   const user = useAppSelector((state) => state?.user?.data);
-  // handle login
-  //   const { showToast } = useToast();
+import { toast } from "sonner";
+import { ChangePasswordUserLoginApi } from "@/services/auth/auth";
+import { useAppSelector } from "@/redux/hooksRedux";
+export default function ChangePasswordUserLogin() {
+  const user = useAppSelector((state) => state?.user?.data);
   const {
     control,
     handleSubmit,
     watch,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm<IUser>({
     defaultValues: {
       oldPassword: "",
-      password: "",
+      newPassword: "",
       confirmPassword: "",
     },
   });
-  const password = watch("password");
-  //   const dispatch = useAppDispatch();
+  const newPassword = watch("newPassword");
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    console.log(data);
-    // const response = await LoginUser(data, showToast);
-    // if (response) {
-    //   dispatch(setUser(response?.data?.user));
-    // }
+    const newDate = {
+      ...data,
+      userId: user?.id,
+      dateUpdate: new Date().toISOString(),
+    };
+    const response = await ChangePasswordUserLoginApi(newDate, toast);
+    if (response?.status === 200) {
+      reset();
+    }
   };
-  // protected Routed
-  //   useEffect(() => {
-  //     if (user?.id !== "") {
-  //         router.replace("/");
-  //     }
-  //   }, [router, user?.id]);
 
   return (
     <form
-      className="min-h-screen flex items-center justify-center pt-16 md:pt-32 pb-4"
+      className="min-h-[calc(100vh-160px)] flex justify-center py-6"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-[340px] md:w-[450px] flex flex-col items-center gap-5">
-        <h2 className="text-2xl font-semibold">تغيير كلمة المرور</h2>
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="oldPassword" className="mb-1 block">
             كلمة المرور القديمة
@@ -70,12 +64,12 @@ export default function ChangePasswordUser() {
           )}
         </div>{" "}
         <div className="w-full flex flex-col gap-2">
-          <Label htmlFor="password" className="mb-1 block">
+          <Label htmlFor="newPassword" className="mb-1 block">
             كلمة المرور الجديدة
           </Label>
           <Controller
             control={control}
-            name="password"
+            name="newPassword"
             rules={{
               required: "كلمة المرور الجديدة مطلوبة",
               pattern: {
@@ -94,8 +88,8 @@ export default function ChangePasswordUser() {
               />
             )}
           />
-          {errors.password && (
-            <p className="text-red-500 text-xs">{errors.password.message}</p>
+          {errors.newPassword && (
+            <p className="text-red-500 text-xs">{errors.newPassword.message}</p>
           )}
         </div>{" "}
         <div className="w-full flex flex-col gap-2">
@@ -108,7 +102,7 @@ export default function ChangePasswordUser() {
             rules={{
               required: "تاكيد كلمة المرور مطلوب",
               validate: (value) =>
-                value === password ||
+                value === newPassword ||
                 "كلمة المرور و تاكيد كلمة المرور غير متطابقين",
             }}
             render={({ field }) => (
@@ -126,8 +120,12 @@ export default function ChangePasswordUser() {
             </p>
           )}
         </div>{" "}
-        <Button type="submit" className="w-full font-bold cursor-pointer">
-          تعديل كلمة المرور
+        <Button
+          type="submit"
+          className="w-full font-bold cursor-pointer"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "...  رجاء الانتظار" : "تعديل كلمة المرور"}
         </Button>
       </div>
     </form>

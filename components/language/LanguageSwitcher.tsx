@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,12 +11,18 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 
 export default function LanguageSwitcher() {
-  const t = useTranslations("home.navbar")
+  const t = useTranslations("home.navbar");
   const locale = useLocale();
-  const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const handleChange = (lang: string) => {
-    const newPath = `/${lang}${pathname.replace(/^\/[a-z]{2}/, "")}`;
+    const queryString = searchParams.toString();
+    const newPath = `/${lang}${pathname.replace(/^\/[a-z]{2}/, "")}${
+      queryString ? `?${queryString}` : ""
+    }`;
+
     router.push(newPath);
   };
   return (

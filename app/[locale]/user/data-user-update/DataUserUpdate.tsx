@@ -14,17 +14,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
-import { useRouter } from "@/i18n/navigation";
 import { UpdateProfileUser } from "@/services/auth/auth";
 import { setUser } from "@/redux/features/userSlice";
 import { toast } from "sonner";
+import { fetchCity } from "@/redux/features/citySlice";
+import { useLocale } from "next-intl";
 
 export default function DataUserUpdate() {
   const user = useAppSelector((state) => state?.user);
+  const city = useAppSelector((state) => state?.city);
+  const locale = useLocale();
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  // handle login
 
+  // handle login
   const {
     control,
     handleSubmit,
@@ -36,7 +38,7 @@ export default function DataUserUpdate() {
       userName: "",
       phoneNumber: "",
       phoneNumber2: "",
-      city: "",
+      cityId: "",
       address: "",
     },
   });
@@ -45,16 +47,18 @@ export default function DataUserUpdate() {
     setValue("userName", user?.data?.userName);
     setValue("phoneNumber", user?.data?.phoneNumber);
     setValue("phoneNumber2", user?.data?.phoneNumber2);
-    setValue("city", user?.data?.city);
+    setValue("cityId", String(user?.data?.cityId));
     setValue("address", user?.data?.address);
   }, [
     setValue,
     user?.data?.address,
-    user?.data?.city,
+    user?.data?.cityId,
     user?.data?.email,
     user?.data?.phoneNumber,
     user?.data?.phoneNumber2,
     user?.data?.userName,
+    city,
+    locale,
   ]);
   //   const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<IUser> = async (data) => {
@@ -68,20 +72,21 @@ export default function DataUserUpdate() {
       dispatch(setUser(response?.data));
     }
   };
-  // protected Routed
+  // fetch city
   useEffect(() => {
-    if (user?.status === "succeeded" && user?.data?.id === "") {
-      router.replace("/");
+    if (city?.status === "idle") {
+      dispatch(fetchCity());
     }
-  }, [user, router]);
+  }, [city?.status, dispatch]);
+
+
 
   return (
     <form
-      className="min-h-[calc(100vh-100px)] flex items-center justify-center pt-28 py-4 md:py-8"
+      className="min-h-[calc(100vh-160px)] flex items-center justify-center py-6"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-[340px] md:w-[450px] flex flex-col items-center gap-5">
-        <h2 className="text-2xl font-semibold">البيانات الشخصية</h2>
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="email" className="mb-1 block">
             البريد الالكتروني
@@ -169,30 +174,46 @@ export default function DataUserUpdate() {
           )}
         </div>{" "}
         <div className="w-full flex flex-col gap-2">
-          <Label htmlFor="city" className="mb-1 block">
+          <Label htmlFor="cityId" className="mb-1 block">
             المدينة
           </Label>
           <Controller
             control={control}
-            name="city"
+            name="cityId"
             render={({ field }) => (
               <Select
                 onValueChange={field.onChange}
-                defaultValue={field.value ?? ""}
+                value={
+                  field.value !== undefined && field.value !== null
+                    ? String(field.value)
+                    : ""
+                }
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="ادخل المدينة" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cairo">القاهرة</SelectItem>
-                  <SelectItem value="giza">الجيزة</SelectItem>
-                  <SelectItem value="alex">الإسكندرية</SelectItem>
+                  {city?.data
+                    ?.filter((city) => city.isShow === true)
+                    .map((city) => (
+                      <SelectItem key={city.id} value={String(city.id)}>
+                        {
+                          city[
+                            locale === "ar"
+                              ? "cityNameAr"
+                              : locale === "en"
+                              ? "cityNameEng"
+                              : "cityNameAbree"
+                          ]
+                        }
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             )}
           />
-          {errors.city && (
-            <p className="text-red-500 text-xs">{errors.city.message}</p>
+          {errors.cityId && (
+            <p className="text-red-500 text-xs">{errors.cityId.message}</p>
           )}
         </div>
         <div className="w-full flex flex-col gap-2">
@@ -215,7 +236,11 @@ export default function DataUserUpdate() {
             <p className="text-red-500 text-xs">{errors.address.message}</p>
           )}
         </div>
-        <Button type="submit" className="w-full font-bold cursor-pointer" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          className="w-full font-bold cursor-pointer"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "جاري التحميل" : "حفظ"}
         </Button>
       </div>

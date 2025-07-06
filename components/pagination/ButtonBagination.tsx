@@ -5,11 +5,9 @@ import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 import { useLocale } from "next-intl";
 
 export default function ButtonPagination({
-  meta,
+  totalPages,
 }: {
-  meta: {
-    totalPages: number;
-  };
+  totalPages: number;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -18,7 +16,7 @@ export default function ButtonPagination({
   const currentPage = Number(searchParams.get("page")) || 1;
 
   const handlePageChange = (newPage: number) => {
-    if (newPage > 0 && newPage <= meta.totalPages) {
+    if (Number(newPage) > 0 && newPage <= Number(totalPages)) {
       const params = new URLSearchParams(searchParams.toString());
       params.set("page", newPage.toString());
       router.push(`${pathname}?${params.toString()}`);
@@ -41,15 +39,15 @@ export default function ButtonPagination({
 
       {/* Pages */}
       <div className="flex gap-2 items-center">
-        {meta.totalPages <= 3 ? (
-          Array.from({ length: meta.totalPages }).map((_, i) => (
+        {totalPages <= 3 ? (
+          Array.from({ length: totalPages }).map((_, i) => (
             <div
               key={i}
               className={`p-1 px-4 rounded-md font-bold cursor-pointer
               ${
                 currentPage === i + 1
-                  ? "bg-link-active dark:bg-card text-white"
-                  : "bg-link-inactive dark:text-blue-600 text-white"
+                  ? "bg-link-active  dark:text-blue-600 text-white"
+                  : "bg-link-inactive dark:bg-card  text-white"
               }`}
               onClick={() => handlePageChange(i + 1)}
             >
@@ -64,8 +62,8 @@ export default function ButtonPagination({
                 className={`p-1 px-4 rounded-md font-bold cursor-pointer
                 ${
                   currentPage === i + 1
-                    ? "bg-link-active dark:bg-card text-white"
-                    : "bg-link-inactive dark:text-blue-600 text-white"
+                    ? "bg-link-active  dark:text-blue-600 text-white"
+                    : "bg-link-inactive dark:bg-card  text-white"
                 }`}
                 onClick={() => handlePageChange(i + 1)}
               >
@@ -76,8 +74,8 @@ export default function ButtonPagination({
               className={`p-1 px-4 rounded-md font-bold min-h-[30px] text-white
               ${
                 currentPage > 2
-                  ? "bg-link-active dark:bg-card"
-                  : "bg-link-inactive dark:text-blue-600"
+                  ? "bg-link-active    dark:text-blue-600"
+                  : "bg-link-inactive dark:bg-card"
               }`}
             >
               {currentPage > 2 ? currentPage : "..."}
@@ -90,7 +88,7 @@ export default function ButtonPagination({
       <div
         onClick={() => handlePageChange(currentPage + 1)}
         className={`${
-          meta.totalPages > currentPage ? "cursor-pointer" : "opacity-50"
+          totalPages > currentPage ? "cursor-pointer" : "opacity-50"
         }`}
       >
         {locale === "ar" ? (

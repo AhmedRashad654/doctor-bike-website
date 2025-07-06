@@ -1,13 +1,16 @@
 import React from "react";
-import PartMainCategory from "./PartMainCategory";
 import TriangleCategory from "./TriangleCategory";
 import { getTranslations } from "next-intl/server";
-
+import { GetMainCategory } from "@/services/mainCategory/mainCategory";
+import CardMainCategory from "./CardMainCategory";
+import { IMainCategory } from "@/types/mainCateroty/IMainCategory";
 
 export default async function MainCategory() {
   const t = await getTranslations("home.mainCategory");
+  const data = await GetMainCategory();
+
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <div className="px-6">
         <div className="max-w-7xl mx-auto flex flex-col gap-7 items-center">
           <div className="relative z-20">
@@ -16,8 +19,11 @@ export default async function MainCategory() {
             </h4>
             <div className="absolute bg-link-active/20 w-[100px] h-[20px] z-10 bottom-0 top-1/2 left-0"></div>
           </div>
-
-          <PartMainCategory type="main" />
+          <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 w-full justify-between">
+            {data?.rows?.map((category: IMainCategory) => (
+              <CardMainCategory key={category?.id} category={category} type="main" />
+            ))}
+          </div>
         </div>
       </div>
       <TriangleCategory />

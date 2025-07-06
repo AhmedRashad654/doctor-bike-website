@@ -1,32 +1,25 @@
 "use client";
 import React from "react";
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { UserRound } from "lucide-react";
 import { ToggleTheme } from "@/components/theme/ToggleTheme";
 import LanguageSwitcher from "@/components/language/LanguageSwitcher";
 import LogoImage from "./LogoImage";
 import { House } from "lucide-react";
 import { ChartBarStacked } from "lucide-react";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import PartIconCartAndLength from "./PartIconCartAndLength";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
-import { Button } from "@/components/ui/button";
-import { setLogout } from "@/redux/features/userSlice";
+import { useAppSelector } from "@/redux/hooksRedux";
 
 export default function Navbar() {
   const t = useTranslations("home.navbar");
-  const router = useRouter();
   const user = useAppSelector((state) => state?.user?.data);
-  const dispatch = useAppDispatch();
   const pathname = usePathname();
   const isRootLocaleOnly = pathname === "/";
 
-  const handleLogout = () => {
-    dispatch(setLogout());
-    router.push("/sign-in");
-  };
+
   return (
     <nav
       className={cn(
@@ -60,15 +53,10 @@ export default function Navbar() {
 
         <LogoImage />
         <div className="flex items-center gap-3 md:gap-5 text-link-active">
-          {user?.id !== "" && (
-            <Button variant="outline" onClick={handleLogout} className="cursor-pointer">
-              <LogOut />
-            </Button>
-          )}
           <LanguageSwitcher />
           <ToggleTheme />
           <PartIconCartAndLength />
-          <Link href={user?.id !== "" ? "/user/data-user-update" : "/sign-in"}>
+          <Link href={user?.id !== "" ? "/user" : "/sign-in"}>
             <UserRound className="cursor-pointer hover:text-black dark:hover:text-blue-400 transition duration-300" />
           </Link>
         </div>

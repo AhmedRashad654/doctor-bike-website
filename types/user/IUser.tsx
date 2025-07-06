@@ -5,6 +5,7 @@ export interface IUser {
   email: string;
   password?: string;
   confirmPassword?: string;
+  oldPassword?: string;
   newPassword?: string;
   normalizedEmail: string;
   emailConfirmed: boolean;
