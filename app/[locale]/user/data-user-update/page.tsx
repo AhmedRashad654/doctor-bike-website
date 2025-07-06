@@ -1,52 +1,83 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-
-// import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-// import { setUser } from "../../../redux/features/userSlice";
 import { IUser } from "@/types/user/IUser";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
+import { useRouter } from "@/i18n/navigation";
+import { UpdateProfileUser } from "@/services/auth/auth";
+import { setUser } from "@/redux/features/userSlice";
+import { toast } from "sonner";
+
 export default function DataUserUpdate() {
-  //   const user = useAppSelector((state) => state?.user?.data);
+  const user = useAppSelector((state) => state?.user);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   // handle login
-  //   const { showToast } = useToast();
+
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    setValue,
+    formState: { errors, isSubmitting },
   } = useForm<IUser>({
     defaultValues: {
       email: "",
-      password: "",
-      name: "",
+      userName: "",
       phoneNumber: "",
       phoneNumber2: "",
       city: "",
       address: "",
     },
   });
+  useEffect(() => {
+    setValue("email", user?.data?.email);
+    setValue("userName", user?.data?.userName);
+    setValue("phoneNumber", user?.data?.phoneNumber);
+    setValue("phoneNumber2", user?.data?.phoneNumber2);
+    setValue("city", user?.data?.city);
+    setValue("address", user?.data?.address);
+  }, [
+    setValue,
+    user?.data?.address,
+    user?.data?.city,
+    user?.data?.email,
+    user?.data?.phoneNumber,
+    user?.data?.phoneNumber2,
+    user?.data?.userName,
+  ]);
   //   const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    console.log(data);
-    // const response = await LoginUser(data, showToast);
-    // if (response) {
-    //   dispatch(setUser(response?.data?.user));
-    // }
+    const newDate = {
+      ...user?.data,
+      ...data,
+      dateUpdate: new Date().toISOString(),
+    };
+    const response = await UpdateProfileUser(newDate, toast);
+    if (response) {
+      dispatch(setUser(response?.data));
+    }
   };
   // protected Routed
-  //   useEffect(() => {
-  //     if (user?.id !== "") {
-  //         router.replace("/");
-  //     }
-  //   }, [router, user?.id]);
+  useEffect(() => {
+    if (user?.status === "succeeded" && user?.data?.id === "") {
+      router.replace("/");
+    }
+  }, [user, router]);
 
   return (
     <form
-      className="min-h-screen flex items-center justify-center pt-28 md:pt-36 pb-4"
+      className="min-h-[calc(100vh-100px)] flex items-center justify-center pt-28 py-4 md:py-8"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-[340px] md:w-[450px] flex flex-col items-center gap-5">
@@ -78,7 +109,7 @@ export default function DataUserUpdate() {
           </Label>
           <Controller
             control={control}
-            name="name"
+            name="userName"
             rules={{ required: " الاسم مطلوب" }}
             render={({ field }) => (
               <Input
@@ -89,8 +120,8 @@ export default function DataUserUpdate() {
               />
             )}
           />
-          {errors.name && (
-            <p className="text-red-500 text-xs">{errors.name.message}</p>
+          {errors.userName && (
+            <p className="text-red-500 text-xs">{errors.userName.message}</p>
           )}
         </div>{" "}
         <div className="w-full flex flex-col gap-2">
@@ -100,13 +131,13 @@ export default function DataUserUpdate() {
           <Controller
             control={control}
             name="phoneNumber"
-            rules={{ required: " رقم الهاتف مطلوب" }}
             render={({ field }) => (
               <Input
                 placeholder="ادخل  رقم الهاتف"
                 type="text"
                 className="py-5"
                 {...field}
+                value={field.value ?? ""}
               />
             )}
           />
@@ -121,13 +152,13 @@ export default function DataUserUpdate() {
           <Controller
             control={control}
             name="phoneNumber2"
-            rules={{ required: " رقم الهاتف البديل مطلوب" }}
             render={({ field }) => (
               <Input
                 placeholder="ادخل  رقم الهاتف البديل"
                 type="text"
                 className="py-5"
                 {...field}
+                value={field.value ?? ""}
               />
             )}
           />
@@ -144,9 +175,11 @@ export default function DataUserUpdate() {
           <Controller
             control={control}
             name="city"
-            rules={{ required: "  المدينة مطلوبة" }}
             render={({ field }) => (
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value ?? ""}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="ادخل المدينة" />
                 </SelectTrigger>
@@ -169,12 +202,12 @@ export default function DataUserUpdate() {
           <Controller
             control={control}
             name="address"
-            rules={{ required: " العنوان مطلوب" }}
             render={({ field }) => (
               <Textarea
                 placeholder="ادخل العنوان بالتفصيل ..."
                 className="py-2"
                 {...field}
+                value={field.value ?? ""}
               />
             )}
           />
@@ -182,8 +215,8 @@ export default function DataUserUpdate() {
             <p className="text-red-500 text-xs">{errors.address.message}</p>
           )}
         </div>
-        <Button type="submit" className="w-full font-bold cursor-pointer">
-          حفظ
+        <Button type="submit" className="w-full font-bold cursor-pointer" disabled={isSubmitting}>
+          {isSubmitting ? "جاري التحميل" : "حفظ"}
         </Button>
       </div>
     </form>

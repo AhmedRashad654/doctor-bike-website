@@ -8,19 +8,17 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-// import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-// import { ForgetPasswordUser } from "../../../services/auth/auth";
-
-// import {
-//   setEnableChangePassword,
-//   setOTP,
-// } from "../../../redux/features/userSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
+import { ForgetPasswordUser } from "@/services/auth/auth";
+import { toast } from "sonner";
+import { setEnableChangePassword, setOTP } from "@/redux/features/userSlice";
+import { IUser } from "@/types/user/IUser";
 
 export default function Otp() {
   const [timeLeft, setTimeLeft] = useState(60);
   const [otp, setOtp] = useState("");
-  //   const userOTP = useAppSelector((state) => state?.user?.otp);
-  //   const dispatch = useAppDispatch();
+  const userOTP = useAppSelector((state) => state?.user?.otp);
+  const dispatch = useAppDispatch();
   const router = useRouter();
   // decrease count
   useEffect(() => {
@@ -30,29 +28,28 @@ export default function Otp() {
     }
   }, [timeLeft]);
   // check send email
-  //   useEffect(() => {
-  //     if (userOTP?.otp === "") {
-  //       router.push("/");
-  //     }
-  //   }, [navigate, userOTP?.otp]);
+  useEffect(() => {
+    if (userOTP?.otp === "") {
+      router.push("/");
+    }
+  }, [router, userOTP?.otp]);
   // handle repeat send otp
-  //   const handleRepeatSendOTP = async () => {
-  //     const data = { email: userOTP?.email };
-  //     const response = await ForgetPasswordUser(data, showToast);
-  //     if (response) {
-  //       dispatch(setOTP(response?.data));
-  //       setTimeLeft(60);
-  //     }
-  //   };
+  const handleRepeatSendOTP = async () => {
+    const data = { email: userOTP?.email };
+    const response = await ForgetPasswordUser(data as IUser, toast);
+    if (response) {
+      dispatch(setOTP(response?.data));
+      setTimeLeft(60);
+    }
+  };
   const handleVerificationCode = () => {
     if (otp?.length < 4) return alert("رمز ال OTP غير مكتمل");
-    //   if (Number(otp) !== Number(userOTP?.otp)) {
-    //     return showToast("رمز ال OTP غير صحيح", "error");
-    //   } else {
-    //     dispatch(setEnableChangePassword(true));
-    //     navigate("/verifictionSuccess");
-    //   }
-    router.push("/success-otp");
+    if (Number(otp) !== Number(userOTP?.otp)) {
+      return toast.error("رمز ال OTP غير صحيح");
+    } else {
+      dispatch(setEnableChangePassword(true));
+      router.push("/success-otp");
+    }
   };
 
   return (
@@ -84,7 +81,9 @@ export default function Otp() {
           </InputOTP>
         </div>
 
-        <Button onClick={handleVerificationCode} className="cursor-pointer">تحقق</Button>
+        <Button onClick={handleVerificationCode} className="cursor-pointer">
+          تحقق
+        </Button>
         <div className="flex flex-col gap-5 items-center">
           <h6>لم يصبلك رمز التحقق ؟</h6>
 
@@ -97,7 +96,7 @@ export default function Otp() {
           ) : (
             <h6
               className="font-bold cursor-pointer"
-              //   onClick={handleRepeatSendOTP}
+              onClick={handleRepeatSendOTP}
             >
               أعد الإرسال الآن
             </h6>

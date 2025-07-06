@@ -13,6 +13,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "@/components/ui/sonner";
+import StoreProvider from "./StoreProvider";
+import InitUser from "@/components/initialUser";
 
 type Params = Promise<{ locale: string }>;
 
@@ -88,13 +90,16 @@ export default async function LocaleLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider>
-            <CartProvider>
-              <main className="max-w-[100vw] overflow-x-hidden">
-                <Navbar />
-                {children}
-              </main>
-              <Toaster position="top-center" />
-            </CartProvider>
+            <StoreProvider>
+              <InitUser />
+              <CartProvider>
+                <main className="max-w-[100vw] overflow-x-hidden">
+                  <Navbar />
+                  {children}
+                </main>
+                <Toaster position="top-center" />
+              </CartProvider>
+            </StoreProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
