@@ -30,6 +30,7 @@ export interface IUser {
   city: string | null;
   roles: string[];
   userId: string;
+  code: string;
 }
 export interface IOtpState {
   otp: string | number;

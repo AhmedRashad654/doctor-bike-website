@@ -28,7 +28,7 @@ export default function DialogDetailsCheckout({
           <div className="flex flex-col gap-3 px-4 text-muted-foreground text-sm">
             <div className="flex items-center gap-1">
               <span>الاسم بالكامل :</span>
-              <span> {getValues("name")} </span>
+              <span> {getValues("userName")} </span>
             </div>
             <div className="flex items-center gap-1">
               <span> رقم الجوال :</span>

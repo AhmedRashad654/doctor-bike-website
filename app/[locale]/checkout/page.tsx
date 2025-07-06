@@ -20,7 +20,7 @@ import DialogDetailsCheckout from "./DialogDetailsCheckout";
 import { useRouter } from "@/i18n/navigation";
 import { useCart } from "@/hooks/useCart";
 export default function Checkout() {
-  const { clearCart } = useCart()
+  const { clearCart } = useCart();
   const [openDialog, setOpenDialog] = useState(false);
   const router = useRouter();
   //   const user = useAppSelector((state) => state?.user?.data);
@@ -38,7 +38,7 @@ export default function Checkout() {
     formState: { errors, isValid },
   } = useForm<IUser>({
     defaultValues: {
-      name: "",
+      userName: "",
       phoneNumber: "",
       phoneNumber2: "",
       city: "",
@@ -53,7 +53,7 @@ export default function Checkout() {
     // if (response) {
     //   dispatch(setUser(response?.data?.user));
     // }
-    clearCart()
+    clearCart();
     router.replace("/success-checkout");
   };
   // protected Routed
@@ -77,7 +77,7 @@ export default function Checkout() {
             </Label>
             <Controller
               control={control}
-              name="name"
+              name="userName"
               rules={{ required: " الاسم مطلوب" }}
               render={({ field }) => (
                 <Input
@@ -88,8 +88,8 @@ export default function Checkout() {
                 />
               )}
             />
-            {errors.name && (
-              <p className="text-red-500 text-xs">{errors.name.message}</p>
+            {errors.userName && (
+              <p className="text-red-500 text-xs">{errors.userName.message}</p>
             )}
           </div>{" "}
           <div className="w-full flex flex-col gap-2">
@@ -106,6 +106,7 @@ export default function Checkout() {
                   type="text"
                   className="py-5"
                   {...field}
+                  value={field.value ?? ""}
                 />
               )}
             />
@@ -129,6 +130,7 @@ export default function Checkout() {
                   type="text"
                   className="py-5"
                   {...field}
+                  value={field.value ?? ""}
                 />
               )}
             />
@@ -149,7 +151,7 @@ export default function Checkout() {
               render={({ field }) => (
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={field.value ?? ""}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="ادخل المدينة" />
@@ -179,6 +181,7 @@ export default function Checkout() {
                   placeholder="ادخل العنوان بالتفصيل ..."
                   className="py-2"
                   {...field}
+                  value={field.value ?? ""}
                 />
               )}
             />

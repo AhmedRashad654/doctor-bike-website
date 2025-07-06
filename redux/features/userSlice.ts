@@ -39,6 +39,7 @@ const initialState: IUserRedux = {
     city: null,
     roles: [],
     userId: "",
+    code: "",
   },
   status: "idle",
 };
