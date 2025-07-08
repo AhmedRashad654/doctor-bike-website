@@ -15,7 +15,7 @@ export default function WrapIncreaseAndDecrease({
   return (
     <IncreaseAndDecrease
       quantity={quantityItem?.quantity || 0}
-      onIncrease={() => increaseQty(product?.id)}
+      onIncrease={() => increaseQty(product?.id, product?.stock, "normail")}
       onDecrease={() => decreaseQty(product?.id)}
     />
   );

@@ -2,7 +2,6 @@ import React from "react";
 import PartBack from "../componant/PartBack";
 import ImagesProduct from "../componant/ImagesProduct";
 import { FaWhatsapp } from "react-icons/fa6";
-import PartAddComment from "../componant/PartAddComment";
 import PartDisplayComments from "../componant/PartDisplayComments";
 import WrapIncreaseAndDecrease from "../componant/WrapIncreaseAndDecrease";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -11,6 +10,7 @@ import { GetSingleProduct } from "@/services/products/products";
 import { formatCurrency } from "@/lib/formCurrency";
 import { GetContact } from "@/services/contact/contact";
 import PartSelectSizeProduct from "../componant/PartSelectSizeProduct";
+import PartAddProductToCard from "../componant/PartAddProductToCart";
 
 export default async function Product({ params }: { params: Params }) {
   const t = await getTranslations("singleProduct");
@@ -18,7 +18,7 @@ export default async function Product({ params }: { params: Params }) {
   const locale = await getLocale();
   const resultParams = await params;
   const data = await GetSingleProduct(resultParams.id);
-  console.log(data, "data");
+
   return (
     <div className="min-h-screen py-6 md:py-10 w-full px-4 bg-card">
       <div className="max-w-7xl mx-auto flex flex-col gap-7">
@@ -53,21 +53,21 @@ export default async function Product({ params }: { params: Params }) {
               {t("reset")} {data?.stock} {t("peace")}
             </p>
           </div>
-          <div className="flex justify-between items-center gap-3">
+          <div className="flex justify-between flex-wrap items-center gap-3">
+            <PartAddProductToCard product={data} />
             <a
               href={`https://wa.me/${dataContact?.data?.whatsApp}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="border-2 border-green-500 rounded-md flex items-center gap-2 py-1 px-6 md:px-10  cursor-pointer "
+              className="border-2 border-green-500 w-full sm:w-fit rounded-md flex items-center justify-center gap-2 py-1 px-6 md:px-10  cursor-pointer translate-y-[1px]"
             >
               <p className="text-green-500"> {t("askAboutProduct")}</p>
               <FaWhatsapp className="text-green-500 text-xl" />
             </a>
-            <WrapIncreaseAndDecrease product={data} />
           </div>
-          <PartAddComment product={data} />
+          <WrapIncreaseAndDecrease product={data} />
           <PartSelectSizeProduct product={data} />
-          <PartDisplayComments />
+          <PartDisplayComments product={data} />
         </div>
       </div>
     </div>

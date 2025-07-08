@@ -12,16 +12,19 @@ type CartItem = {
   normailPrice: number;
   priceForColor: number;
   quantity: number;
+  discount: number;
   quantityForColor: number;
   image?: string;
   isOrderSize: boolean;
+  normailStock: number;
+  stockForColor: number;
 };
 
 type CartContextType = {
   cart: CartItem[];
   addToCart: (item: Omit<CartItem, "quantity" | "quantityForColor">) => void;
   removeFromCart: (id: string | number, type?: string) => void;
-  increaseQty: (id: string | number, type?: string) => void;
+  increaseQty: (id: string | number, stock: number, type?: string) => void;
   decreaseQty: (id: string | number, type?: string) => void;
   getItemById: (id: string | number, type?: string) => CartItem | undefined;
   clearCart: () => void;
@@ -64,67 +67,66 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
     toast.info("تم حذف المنتج من عربة التسوق");
   };
+  const increaseQty = (id: string | number, stock: number, type?: string) => {
+    let canIncrease = false;
 
-  const increaseQty = (id: string | number, type?: string) => {
-    if (type && type === "color") {
-      setCart((prev) =>
-        prev.map((item) =>
-          item.idColor === id
-            ? { ...item, quantityForColor: item.quantityForColor + 1 }
-            : item
-        )
-      );
-    } else {
-      setCart((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-        )
-      );
-    }
-
-    toast.info("تم زيادة الكمية");
-  };
-
-  const decreaseQty = (id: string | number, type?: string) => {
-    setCart((prev) => {
-      const updatedCart = prev.map((item) => {
-        if (type === "color") {
-          if (item.idColor === id) {
-            return {
-              ...item,
-              quantityForColor: Math.max(1, (item.quantityForColor || 1) - 1),
-            };
-          }
-          return item;
-        } else {
-          if (item.id === id) {
-            return {
-              ...item,
-              quantity: Math.max(1, (item.quantity || 1) - 1),
-            };
+    setCart((prev) =>
+      prev.map((item) => {
+        if (type === "color" && item.idColor === id) {
+          if (item.quantityForColor < stock) {
+            canIncrease = true;
+            return { ...item, quantityForColor: item.quantityForColor + 1 };
           }
           return item;
         }
-      });
 
-      const oldItem = prev.find((item) =>
-        type === "color" ? item.idColor === id : item.id === id
-      );
-      const newItem = updatedCart.find((item) =>
-        type === "color" ? item.idColor === id : item.id === id
-      );
+        if ((!type || type === "normail") && item.id === id) {
+          if (item.quantity < stock) {
+            canIncrease = true;
+            return { ...item, quantity: item.quantity + 1 };
+          }
+          return item;
+        }
 
-      const oldQty =
-        type === "color" ? oldItem?.quantityForColor : oldItem?.quantity;
-      const newQty =
-        type === "color" ? newItem?.quantityForColor : newItem?.quantity;
-
-      if (oldItem && newItem && newQty! < oldQty!) {
-        toast.info("تم تقليل الكمية");
+        return item;
+      })
+    );
+    setTimeout(() => {
+      if (canIncrease) {
+        toast.info("تم زيادة الكمية");
+      } else {
+        toast.error("الكمية المطلوبة غير متوفرة في المخزون");
       }
+    }, 0);
+  };
 
-      return updatedCart;
+  const decreaseQty = (id: string | number, type?: string) => {
+    let decreased = false;
+
+    setCart((prev) => {
+      return prev.map((item) => {
+        if (type === "color" && item.idColor === id) {
+          const oldQty = item.quantityForColor || 1;
+          const newQty = Math.max(1, oldQty - 1);
+          if (newQty < oldQty) decreased = true;
+          return { ...item, quantityForColor: newQty };
+        }
+
+        if ((!type || type === "normail") && item.id === id) {
+          const oldQty = item.quantity || 1;
+          const newQty = Math.max(1, oldQty - 1);
+          if (newQty < oldQty) decreased = true;
+          return { ...item, quantity: newQty };
+        }
+
+        return item;
+      });
     });
+
+    // بعد setCart (في نفس الرفرفة) نعرض التوست
+    setTimeout(() => {
+      if (decreased) toast.info("تم تقليل الكمية");
+    }, 0);
   };
 
   const getItemById = (
@@ -151,11 +153,21 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.normailPrice * item.quantity,
-    0
-  );
+  const totalItems = cart.reduce((sum, item) => {
+    if (item.isOrderSize === true) {
+      return sum + (item.quantityForColor || 0);
+    } else {
+      return sum + (item.quantity || 0);
+    }
+  }, 0);
+  
+  const totalPrice = cart.reduce((sum, item) => {
+    if (item.isOrderSize) {
+      return sum + (item.priceForColor || 0) * (item.quantityForColor || 0);
+    } else {
+      return sum + (item.normailPrice || 0) * (item.quantity || 0);
+    }
+  }, 0);
 
   return (
     <CartContext.Provider

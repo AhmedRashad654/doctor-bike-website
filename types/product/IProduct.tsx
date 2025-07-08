@@ -52,3 +52,14 @@ export interface IProduct {
   viewImagesItems: IImageProduct[];
   itemSizes: IItemSize[];
 }
+export interface IComment {
+  id: number;
+  comment: string;
+  productId: number | string;
+  productName: string;
+  rate: number;
+  userName: string;
+  userAddId?: string;
+  isShow?: boolean;
+  dateAdd: Date | string;
+}

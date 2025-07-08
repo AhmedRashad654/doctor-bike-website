@@ -38,16 +38,19 @@ export default function TabSingleColors({
       nameAbree: product?.nameAbree,
       normailPrice: product?.normailPrice,
       image: product?.viewImagesItems[0]?.imageUrl,
+      discount: product?.discount || 0,
       isOrderSize: true,
       idSize: selectedSize.id,
       idColor: selectedColor.id,
       priceForColor: selectedColor.normailPrice,
+      normailStock: product?.stock,
+      stockForColor: selectedColor.stock,
     });
   };
   if (!selectedColor) return;
   return (
     <div className="flex">
-      <div className="flex flex-col gap-2 mt-2 text-sm text-gray-700">
+      <div className="flex flex-col gap-2 mt-2 text-sm ">
         <div className="flex gap-2 items-center">
           <span className="font-[600] text-xl">Quantity :</span>
           <span className="text-lg"> {selectedColor?.stock}</span>
@@ -58,13 +61,7 @@ export default function TabSingleColors({
             {formatCurrency(selectedColor?.normailPrice)}
           </span>
         </div>
-        {isInCart(selectedColor?.id, "color") && (
-          <IncreaseAndDecrease
-            quantity={quantityItem?.quantityForColor || 0}
-            onIncrease={() => increaseQty(selectedColor?.id, "color")}
-            onDecrease={() => decreaseQty(selectedColor?.id, "color")}
-          />
-        )}
+
         {isInCart(selectedColor?.id, "color") ? (
           <Button
             className="flex items-center gap-2 justify-center w-full sm:w-[200px] cursor-pointer dark:bg-gray-600 text-white"
@@ -81,6 +78,15 @@ export default function TabSingleColors({
             <p> {t("addtoCart")}</p>
             <ShoppingCart className="w-4 h-4" />
           </Button>
+        )}
+        {isInCart(selectedColor?.id, "color") && (
+          <IncreaseAndDecrease
+            quantity={quantityItem?.quantityForColor || 0}
+            onIncrease={() =>
+              increaseQty(selectedColor?.id, selectedColor?.stock, "color")
+            }
+            onDecrease={() => decreaseQty(selectedColor?.id, "color")}
+          />
         )}
       </div>
     </div>

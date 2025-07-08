@@ -11,11 +11,17 @@ export default function User() {
   const user = useAppSelector((state) => state?.user);
   const router = useRouter();
   // protected Routed
+
   useEffect(() => {
-    if (user?.status === "succeeded" && !user.data?.id) {
-      router.replace("/sign-in");
+    if (user?.status !== "idle" && user?.status !== "loading") {
+      const notLoggedIn = !user?.data?.id;
+
+      if (notLoggedIn) {
+        router.replace("/sign-in");
+      }
     }
   }, [user?.status, user?.data?.id, router]);
+
   return (
     <div className="min-h-[calc(100vh-100px)] flex justify-center py-6 md:py-10">
       <Tabs defaultValue="data" className="mb-6 w-full max-w-7xl px-6">

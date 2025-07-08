@@ -1,12 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-
-// import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-// import { setUser } from "../../../redux/features/userSlice";
 import { IUser } from "@/types/user/IUser";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -19,12 +16,12 @@ import {
 import DialogDetailsCheckout from "./DialogDetailsCheckout";
 import { useRouter } from "@/i18n/navigation";
 import { useCart } from "@/hooks/useCart";
+import { useAppSelector } from "@/redux/hooksRedux";
 export default function Checkout() {
-  const { clearCart } = useCart();
+  const { clearCart, cart } = useCart();
   const [openDialog, setOpenDialog] = useState(false);
+  const user = useAppSelector((state) => state?.user);
   const router = useRouter();
-  //   const user = useAppSelector((state) => state?.user?.data);
-  // handle login
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -56,17 +53,22 @@ export default function Checkout() {
     clearCart();
     router.replace("/success-checkout");
   };
-  // protected Routed
-  //   useEffect(() => {
-  //     if (user?.id !== "") {
-  //         router.replace("/");
-  //     }
-  //   }, [router, user?.id]);
+  //
+  useEffect(() => {
+    if (user?.status !== "idle" && user?.status !== "loading") {
+      const notLoggedIn = !user?.data?.id;
+      const cartEmpty = cart?.length === 0;
+
+      if (notLoggedIn || cartEmpty) {
+        router.replace("/");
+      }
+    }
+  }, [user?.status, user?.data?.id, cart?.length, router]);
 
   return (
     <>
       <form
-        className="min-h-screen flex items-center justify-center pt-28 md:pt-36 pb-4"
+        className="min-h-screen flex items-center justify-center py-6 md:py-10"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="w-[340px] md:w-[450px] flex flex-col items-center gap-5">

@@ -53,7 +53,7 @@ export const fetchUser = createAsyncThunk(
         return thunkAPI.rejectWithValue("No token found");
       }
       const decoded: TokenPayload = jwtDecode(token);
-      const userId = decoded.nameid;
+      const userId = decoded?.nameid;
       const response = await request.post(`/Users/GetById?id=${userId}`, {
         paginationInfo: {
           pageIndex: 0,

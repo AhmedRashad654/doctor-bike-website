@@ -16,7 +16,7 @@ export default function PartSelectSizeProduct({
   if (!selectedSize) return null;
 
   return (
-    <div className="mb-6 w-full max-w-7xl">
+    <div className="my-3 w-full max-w-7xl">
       {/* Size selector */}
       <div className="w-full flex sm:flex-row flex-col-reverse gap-4 justify-between bg-gray-100 dark:bg-gray-800 rounded-md h-fit p-2">
         {product?.itemSizes?.map((item) => (
