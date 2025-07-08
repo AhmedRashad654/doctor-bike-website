@@ -2,16 +2,21 @@
 import React from "react";
 import IncreaseAndDecrease from "./IncreaseAndDecrease";
 import { useCart } from "@/hooks/useCart";
+import { IProduct } from "@/types/product/IProduct";
 
-export default function WrapIncreaseAndDecrease() {
+export default function WrapIncreaseAndDecrease({
+  product,
+}: {
+  product: IProduct;
+}) {
   const { increaseQty, decreaseQty, getItemById, isInCart } = useCart();
-  const quantityItem = getItemById("5");
-  if (!isInCart("5")) return;
+  const quantityItem = getItemById(product?.id);
+  if (!isInCart(product?.id) || quantityItem?.isOrderSize === true) return;
   return (
     <IncreaseAndDecrease
       quantity={quantityItem?.quantity || 0}
-      onIncrease={() => increaseQty("5")}
-      onDecrease={() => decreaseQty("5")}
+      onIncrease={() => increaseQty(product?.id)}
+      onDecrease={() => decreaseQty(product?.id)}
     />
   );
 }

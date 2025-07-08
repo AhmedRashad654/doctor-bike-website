@@ -3,6 +3,26 @@ export interface IImageProduct {
   imageUrl: string;
   itemId: number;
 }
+
+export interface IItemColor {
+  colorAbbr: string;
+  colorAr: string;
+  colorEn: string;
+  discount: number;
+  id: number;
+  normailPrice: number;
+  sizeId: number | string;
+  stock: number;
+  wholesalePrice: number;
+}
+export interface IItemSize {
+  id: number | string;
+  itemId: number;
+  size: string;
+  discount: number;
+  description: string | null;
+  itemSizeColor: IItemColor[];
+}
 export interface IProduct {
   id: number;
   nameAr: string;
@@ -30,5 +50,5 @@ export interface IProduct {
   normalImagesItems: IImageProduct[];
   _3DImagesItems: IImageProduct[];
   viewImagesItems: IImageProduct[];
-  //   itemSizes: any[];
+  itemSizes: IItemSize[];
 }

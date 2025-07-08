@@ -2,13 +2,14 @@
 import React from "react";
 import instagem from "@/public/instagram.png";
 import facebook from "@/public/logos_facebook.png";
-import tiktok from "@/public/logos_tiktok-icon.png";
+import { IoCallOutline } from "react-icons/io5";
 import whatsapp from "@/public/logos_whatsapp-icon.png";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
+import { IContact } from "@/types/contact/IContact";
 
-export default function FooterHeaderSection() {
+export default function FooterHeaderSection({ data }: { data: IContact }) {
   const locale = useLocale();
   const t = useTranslations("home.heroSection");
   return (
@@ -24,27 +25,42 @@ export default function FooterHeaderSection() {
             {t("followUs")}
           </h6>
           <div className="flex items-center gap-3 p-3">
-            <Image
-              src={instagem}
-              alt="instagem"
-              width={30}
-              height={30}
-              className="shadow-button-footer p-0  text-4xl z-50"
-            />
-            <Image
-              src={facebook}
-              alt="facebook"
-              width={30}
-              height={30}
-              className="shadow-button-footer p-0  text-4xl z-50"
-            />
-            <Image
-              src={tiktok}
-              alt="tiktok"
-              width={30}
-              height={30}
-              className="shadow-button-footer p-0  text-4xl z-50"
-            />
+            <a
+              href={data?.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="z-50 cursor-pointer"
+            >
+              <Image
+                src={instagem}
+                alt="instagem"
+                width={30}
+                height={30}
+                className="shadow-button-footer p-0  text-4xl z-50"
+              />
+            </a>
+            <a
+              href={data?.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="z-50 cursor-pointer"
+            >
+              <Image
+                src={facebook}
+                alt="facebook"
+                width={30}
+                height={30}
+                className="shadow-button-footer p-0  text-4xl"
+              />
+            </a>
+            <a
+              href={`tel:${data?.call}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="z-50 cursor-pointer"
+            >
+              <IoCallOutline className="w-[30px] h-[30px] text-green-500 z-50 shadow-button-footer" />
+            </a>
           </div>
         </motion.div>
         <motion.div
@@ -56,13 +72,20 @@ export default function FooterHeaderSection() {
           <h6 className="text-transperants dark:text-gray-200/80 text-lg font-semibold">
             {t("explation")}
           </h6>
-          <Image
-            src={whatsapp}
-            alt="whatsapp"
-            width={30}
-            height={30}
-            className="shadow-button-footer p-0  text-4xl z-10 "
-          />
+          <a
+            href={`https://wa.me/${data?.whatsApp}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="z-50 cursor-pointer"
+          >
+            <Image
+              src={whatsapp}
+              alt="whatsapp"
+              width={30}
+              height={30}
+              className="shadow-button-footer p-0  text-4xl z-10 "
+            />
+          </a>
         </motion.div>
       </div>
     </div>

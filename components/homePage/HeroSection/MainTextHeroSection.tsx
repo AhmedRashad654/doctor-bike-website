@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+
 export default function MainTextHeroSection() {
   const t = useTranslations("home.heroSection");
   return (

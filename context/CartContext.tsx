@@ -3,22 +3,29 @@
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 type CartItem = {
-  id: string;
-  name: string;
-  price: number;
+  id: string | number;
+  idSize: string | number | null;
+  idColor: string | number | null;
+  nameAr: string;
+  nameEng: string;
+  nameAbree: string;
+  normailPrice: number;
+  priceForColor: number;
   quantity: number;
+  quantityForColor: number;
   image?: string;
+  isOrderSize: boolean;
 };
 
 type CartContextType = {
   cart: CartItem[];
-  addToCart: (item: Omit<CartItem, "quantity">) => void;
-  removeFromCart: (id: string) => void;
-  increaseQty: (id: string) => void;
-  decreaseQty: (id: string) => void;
-  getItemById: (id: string) => CartItem | undefined;
+  addToCart: (item: Omit<CartItem, "quantity" | "quantityForColor">) => void;
+  removeFromCart: (id: string | number, type?: string) => void;
+  increaseQty: (id: string | number, type?: string) => void;
+  decreaseQty: (id: string | number, type?: string) => void;
+  getItemById: (id: string | number, type?: string) => CartItem | undefined;
   clearCart: () => void;
-  isInCart: (id: string) => boolean;
+  isInCart: (id: string | number, type?: string) => boolean;
   totalItems: number;
   totalPrice: number;
 };
@@ -38,46 +45,81 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (item: Omit<CartItem, "quantity">) => {
+  const addToCart = (item: Omit<CartItem, "quantity" | "quantityForColor">) => {
     setCart((prev) => {
-      const exists = prev.find((p) => p.id === item.id);
-      if (exists) {
-        return prev.map((p) =>
-          p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p
-        );
+      if (item?.isOrderSize === false) {
+        return [...prev, { ...item, quantity: 1, quantityForColor: 0 }];
       } else {
-        return [...prev, { ...item, quantity: 1 }];
+        return [...prev, { ...item, quantity: 0, quantityForColor: 1 }];
       }
     });
     toast.info("تم إضافة المنتج إلى عربة التسوق");
   };
 
-  const removeFromCart = (id: string) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+  const removeFromCart = (id: string | number, type?: string) => {
+    if (type && type === "color") {
+      setCart((prev) => prev.filter((item) => item.idColor !== id));
+    } else {
+      setCart((prev) => prev.filter((item) => item.id !== id));
+    }
     toast.info("تم حذف المنتج من عربة التسوق");
   };
 
-  const increaseQty = (id: string) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
+  const increaseQty = (id: string | number, type?: string) => {
+    if (type && type === "color") {
+      setCart((prev) =>
+        prev.map((item) =>
+          item.idColor === id
+            ? { ...item, quantityForColor: item.quantityForColor + 1 }
+            : item
+        )
+      );
+    } else {
+      setCart((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      );
+    }
+
     toast.info("تم زيادة الكمية");
   };
 
-  const decreaseQty = (id: string) => {
+  const decreaseQty = (id: string | number, type?: string) => {
     setCart((prev) => {
-      const updatedCart = prev.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
-          : item
+      const updatedCart = prev.map((item) => {
+        if (type === "color") {
+          if (item.idColor === id) {
+            return {
+              ...item,
+              quantityForColor: Math.max(1, (item.quantityForColor || 1) - 1),
+            };
+          }
+          return item;
+        } else {
+          if (item.id === id) {
+            return {
+              ...item,
+              quantity: Math.max(1, (item.quantity || 1) - 1),
+            };
+          }
+          return item;
+        }
+      });
+
+      const oldItem = prev.find((item) =>
+        type === "color" ? item.idColor === id : item.id === id
+      );
+      const newItem = updatedCart.find((item) =>
+        type === "color" ? item.idColor === id : item.id === id
       );
 
-      const oldItem = prev.find((item) => item.id === id);
-      const newItem = updatedCart.find((item) => item.id === id);
+      const oldQty =
+        type === "color" ? oldItem?.quantityForColor : oldItem?.quantity;
+      const newQty =
+        type === "color" ? newItem?.quantityForColor : newItem?.quantity;
 
-      if (oldItem && newItem && newItem.quantity < oldItem.quantity) {
+      if (oldItem && newItem && newQty! < oldQty!) {
         toast.info("تم تقليل الكمية");
       }
 
@@ -85,21 +127,33 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  const getItemById = (id: string): CartItem | undefined =>
-    cart.find((item) => item.id === id);
+  const getItemById = (
+    id: string | number,
+    type?: string
+  ): CartItem | undefined => {
+    if (type && type === "color") {
+      return cart.find((item) => item.idColor === id);
+    } else {
+      return cart.find((item) => item.id === id);
+    }
+  };
 
   const clearCart = () => {
     setCart([]);
     // toast.info("تم مسح عربة التسوق");
     localStorage.removeItem("cart");
   };
-  const isInCart = (id: string): boolean => {
-    return cart.some((item) => item.id === id);
+  const isInCart = (id: string | number, type?: string): boolean => {
+    if (type && type === "color") {
+      return cart.some((item) => item.idColor === id);
+    } else {
+      return cart.some((item) => item.id === id);
+    }
   };
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.normailPrice * item.quantity,
     0
   );
 
