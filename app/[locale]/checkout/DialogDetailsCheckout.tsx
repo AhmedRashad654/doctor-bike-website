@@ -33,6 +33,7 @@ export default function DialogDetailsCheckout({
   const t2 = useTranslations("cart");
 
   const delivaryCity = city?.find((e) => String(e?.id) === getValues("cityId"));
+  console.log(delivaryCity);
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
@@ -40,7 +41,7 @@ export default function DialogDetailsCheckout({
           <DialogTitle className="text-center mb-2">
             {t("detailsCheckout")}
           </DialogTitle>
-          <div className="flex flex-col gap-3 px-4 text-muted-foreground text-sm">
+          <div className="flex flex-col gap-3 px-0 md:px-4 text-muted-foreground text-sm">
             <div className="flex items-center gap-1">
               <span> {t("name")} :</span>
               <span> {getValues("userName")} </span>
@@ -89,10 +90,9 @@ export default function DialogDetailsCheckout({
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span>
+              <span className="whitespace-nowrap">
                 {" "}
-                {t2("totalPriceAfterDiscount")}
-                <span> </span>( {t("afterDlivery")})
+                {t2("totalPriceAfterDiscount")}( {t("afterDlivery")})
               </span>
               <span>
                 {delivaryCity

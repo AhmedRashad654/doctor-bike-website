@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import instagem from "@/public/instagram.png";
 import whatsapp from "@/public/logos_whatsapp-icon.png";
+import { GetContact } from "@/services/contact/contact";
 import { Phone } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -8,6 +9,7 @@ import { FaXTwitter } from "react-icons/fa6";
 
 export default async function ContactUs() {
   const t = await getTranslations("contactUs");
+  const data = await GetContact();
   return (
     <main className="min-h-screen py-6 md:py-12 px-4 md:px-0 flex justify-center items-start bg-background text-foreground">
       <Card className="w-full max-w-2xl shadow-md border">
@@ -25,18 +27,18 @@ export default async function ContactUs() {
             <li className="flex items-center justify-between">
               <span className="font-medium"> {t("phoneNumber")}:</span>
               <a
-                href="tel:+201234567890"
+                href={`tel:${data?.data?.call}`}
                 className="text-blue-600 dark:text-blue-400 hover:underline"
               >
                 <Phone className="inline ml-2 w-5 h-5" />
-                +20 123 456 7890
+                {data?.data?.call}
               </a>
             </li>
 
             <li className="flex items-center justify-between">
               <span className="font-medium">{t("whatsApp")}:</span>
               <a
-                href="https://wa.me/201234567890"
+                href={`https://wa.me/${data?.data?.whatsApp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-green-600 flex items-center gap-3 hover:underline"
@@ -66,7 +68,7 @@ export default async function ContactUs() {
             <li className="flex items-center justify-between">
               <span className="font-medium">{t("instagram")}:</span>
               <a
-                href="https://instagram.com/yourprofile"
+                href={data?.data?.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-pink-600 flex items-center gap-3 hover:underline"

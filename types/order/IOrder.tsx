@@ -1,10 +1,12 @@
+import { IProduct } from "../product/IProduct";
+
 export interface IOrder {
   id: number;
   customerId: string;
   customerName: string;
-  phoneNum1: string ;
-  phoneNum2: string ;
-  cityId: number | string ;
+  phoneNum1: string;
+  phoneNum2: string;
+  cityId: number | string;
   address: string;
   status: string;
   isWholesale?: boolean;
@@ -24,9 +26,10 @@ export interface IOrder {
 }
 
 export interface IOrderItem {
+  item?: IProduct;
   id: number;
-  orderId: number ;
-  itemId: number ;
+  orderId: number;
+  itemId: number;
   isOrderSize: boolean;
   itemSizeId?: number | null;
   itemSizeColorId?: number | null;
@@ -35,3 +38,4 @@ export interface IOrderItem {
   totalPriceWithDiscound: number;
   totalPriceWithOutDiscound: number;
 }
+

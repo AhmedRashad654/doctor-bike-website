@@ -20,7 +20,7 @@ export default function User() {
   }, [user, router]);
 
   return (
-    <div className="min-h-[calc(100vh-100px)] flex justify-center py-6 md:py-10">
+    <div className="min-h-[calc(100vh-100px)] flex justify-center py-12 md:py-10">
       <Tabs defaultValue="data" className="mb-6 w-full max-w-7xl px-6">
         <TabsList className="w-full flex sm:flex-row flex-col-reverse  gap-4 justify-between bg-gray-100 dark:bg-gray-800 rounded-md">
           <TabsTrigger value="logout" className="cursor-pointer font-bold">

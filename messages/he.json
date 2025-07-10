@@ -148,7 +148,18 @@
     "checkCodeDiscount": "אימות",
     "codeNotAvailable": "הקוד אינו זמין",
     "codeAvailabe": "קוד זה זמין",
-    "enterCity": "בחר עיר"
+    "enterCity": "בחר עיר",
+    "noFoundOrerYet": "אין הזמנות עדיין.",
+    "New": "חדש",
+    "Pending": "ממתין",
+    "Done": "הושלם",
+    "Canceled": "בוטל",
+    "nameProducts": "שם המוצר",
+    "dateOrder": "תאריך ההזמנה",
+    "status": "סטטוס",
+    "cancelOrder": "ביטול הזמנה",
+    "orderCanceledSuccessfully": "ההזמנה בוטלה בהצלחה",
+    "errorOccurDuringEditOrder": "קרה שגיאה בעת עריכת ההזמנה"
   },
   "cart": {
     "cart": "עגלה",
@@ -160,7 +171,7 @@
     "item": "פריט",
     "discount": "הנחה",
     "youMustLogin": "עליך להתחבר תחילה.",
-    "totalPriceAfterDiscount":"מחיר כולל לאחרהנחה"
+    "totalPriceAfterDiscount": "מחיר כולל לאחרהנחה"
   },
   "about": {
     "title": "אודותינו",

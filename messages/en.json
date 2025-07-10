@@ -148,7 +148,18 @@
     "checkCodeDiscount": "ckeck",
     "codeAvailabe": "code is available",
     "codeNotAvailable": "code is not available",
-    "enterCity": "Select city"
+    "enterCity": "Select city",
+    "noFoundOrerYet": "No orders found yet.",
+    "New": "New",
+    "Pending": "Pending",
+    "Done": "Done",
+    "Canceled": "Canceled",
+    "nameProducts": "Product Name",
+    "dateOrder": "Order Date",
+    "status": "Status",
+    "cancelOrder": "Cancel Order",
+    "orderCanceledSuccessfully": "Order canceled successfully",
+    "errorOccurDuringEditOrder": "An error occurred while editing the order"
   },
   "cart": {
     "cart": "Shopping Cart",

@@ -30,6 +30,7 @@ export const GetMyOrdersByStatus = async (
     const response = await request.post(
       `/Orders/GetAllOrdersByUserId?statusOrder=${status}&userId=${userId}`,
       {
+        listRelatedObjects: ["OrderDetails", "items"],
         paginationInfo: {
           pageIndex: page,
           pageSize: 10,
@@ -37,8 +38,18 @@ export const GetMyOrdersByStatus = async (
       }
     );
     return response;
-  } catch (error) {
-    console.log(error);
+  } catch {
     console.log("error on get order user");
+  }
+};
+
+export const EditOnStatusOrder = async (newData: unknown) => {
+  try {
+    const response = await request.post(`/Orders/ManageOrder`, newData);
+    console.log(response);
+    return response;
+  } catch {
+    console.log("error on edit status order");
+    return null;
   }
 };

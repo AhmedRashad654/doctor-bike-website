@@ -9,81 +9,105 @@ import Empty from "@/components/ui/Empty";
 import emptyImage from "@/public/empty.png";
 import ButtonPagination from "@/components/pagination/ButtonBagination";
 import { useAppSelector } from "@/redux/hooksRedux";
-import { useRouter } from "@/i18n/navigation";
-import { GetMyOrdersByStatus } from "@/services/orders/orders";
-import { IOrder } from "@/types/order/IOrder";
+import {
+  EditOnStatusOrder,
+  GetMyOrdersByStatus,
+} from "@/services/orders/orders";
+import { IOrder, IOrderItem } from "@/types/order/IOrder";
 import { useSearchParams } from "next/navigation";
+import SkeletonOrder from "./skeletonOrder";
+import { toast } from "sonner";
 type OrderStatus = "New" | "Pending" | "Done" | "canceled";
-
+interface StateOrder {
+  rows: IOrder[];
+  paginationInfo: {
+    totalPagesCount: number;
+  };
+}
 export default function Orders() {
   const [activeTab, setActiveTab] = useState<OrderStatus>("New");
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
+  const [loadingOrder, setLoadingOrder] = useState<boolean>(false);
+  const [loadingCancelOrder, setLoadingCancelOrder] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const page = searchParams.get("page") || 1;
   const t = useTranslations("order");
   const user = useAppSelector((state) => state?.user?.data);
-  const [orders, setOrders] = useState<{
-    rows: IOrder[];
-    paginationInfo: {
-      totalPagesCount: number;
-    };
-  }>();
+  const [orders, setOrders] = useState<StateOrder>();
   const locale = useLocale();
-  const router = useRouter();
 
   useEffect(() => {
     async function getOrders() {
+      setLoadingOrder(true);
       const response = await GetMyOrdersByStatus(activeTab, user?.id, page);
       setOrders(response?.data);
-      console.log(response);
+      setLoadingOrder(false);
     }
     getOrders();
   }, [activeTab, user?.id, page]);
-  const baseColumns =
-    locale === "ar"
-      ? [
-          { key: "status", label: "الحالة" },
-          { key: "date", label: "تاريخ الطلب" },
-          { key: "name", label: "اسم المنتج" },
-        ]
-      : [
-          { key: "name", label: "Product Name" },
-          { key: "date", label: "Order Date" },
-          { key: "status", label: "Status" },
-        ];
 
-  const columns =
-    activeTab === "New"
-      ? locale !== "en"
-        ? [{ key: "action", label: "إلغاء الطلب" }, ...baseColumns]
-        : [...baseColumns, { key: "action", label: "cancel order" }]
-      : baseColumns;
-
-  const openCancelDialog = (orderId: number) => {
-    setSelectedOrderId(orderId);
+  const openCancelDialog = (order: IOrder) => {
+    setSelectedOrder(order);
     setOpenDialog(true);
   };
 
-  const confirmCancel = () => {
-    console.log("تم إلغاء الطلب رقم:", selectedOrderId);
-    setOpenDialog(false);
-    setSelectedOrderId(null);
+  const confirmCancel = async () => {
+    const newDate = {
+      ...selectedOrder,
+      status: "Canceled",
+    };
+    setLoadingCancelOrder(true);
+    const response = await EditOnStatusOrder(newDate);
+    if (response?.status === 200) {
+      setOpenDialog(false);
+      setSelectedOrder(null);
+      setOrders((prevOrders) => {
+        if (!prevOrders) return undefined;
+        return {
+          ...prevOrders,
+          rows: prevOrders.rows.filter(
+            (order) => order.id !== selectedOrder?.id
+          ),
+        };
+      });
+      toast.success(t("orderCanceledSuccessfully"));
+    } else {
+      toast.error(t("errorOccurDuringEditOrder"));
+    }
+    setLoadingCancelOrder(false);
+    console.log(response, "update Status");
   };
 
   const closeDialog = () => {
     setOpenDialog(false);
   };
-  // protected route
-  useEffect(() => {
-    if (!user?.id) {
-      router.push("/");
-    }
-  }, [router, user?.id]);
-  if (orders?.rows?.length === 0)
-    return <Empty emptyImage={emptyImage} text={"لا يوجد طلبات حاليا"} />;
+
+  function extractItemNamesByLanguage(
+    details: IOrderItem[],
+    lang: string
+  ): string {
+    const names = details.map((detail) => {
+      const item = detail.item;
+      if (!item) return "";
+
+      switch (lang) {
+        case "ar":
+          return item.nameAr;
+        case "en":
+          return item.nameEng;
+        case "he":
+          return item.nameAbree;
+        default:
+          return item.nameEng;
+      }
+    });
+    const separator = lang === "ar" ? " ، " : " , ";
+    return names.filter(Boolean).join(separator);
+  }
+  const classDirestion = locale === "en" ? "text-start" : "text-end";
   return (
-    <div className="max-w-7xl mx-auto p-6 pt-32 md:pt-36">
+    <div className="max-w-7xl mx-auto py-6 px-4 md:py-10">
       <h1 className="text-2xl font-bold mb-6 text-center">{t("myOrders")}</h1>
       <Tabs
         value={activeTab}
@@ -91,91 +115,133 @@ export default function Orders() {
         className="mb-6"
       >
         <TabsList className="w-full justify-center bg-gray-100 dark:bg-gray-800 rounded-md p-1">
-          <TabsTrigger value="جديدة" className="cursor-pointer">
+          <TabsTrigger value="New" className="cursor-pointer">
             {t("New")}
           </TabsTrigger>
-          <TabsTrigger value="جارية" className="cursor-pointer">
+          <TabsTrigger value="Pending" className="cursor-pointer">
             {t("Pending")}
           </TabsTrigger>
-          <TabsTrigger value="مكتملة" className="cursor-pointer">
+          <TabsTrigger value="Done" className="cursor-pointer">
             {t("Done")}
           </TabsTrigger>
-          <TabsTrigger value="ملغية" className="cursor-pointer">
-            {t("canceled")}
+          <TabsTrigger value="Canceled" className="cursor-pointer">
+            {t("Canceled")}
           </TabsTrigger>
         </TabsList>
-
-        <TabsContent value={activeTab}>
-          {
-            <div className="overflow-auto mt-4">
-              <table className="w-full border-collapse text-sm">
-                <thead>
-                  <tr>
-                    {columns.map((col) => (
+        {orders && orders?.rows?.length === 0 && (
+          <Empty emptyImage={emptyImage} text={t("noFoundOrerYet")} />
+        )}
+        {loadingOrder ? (
+          <SkeletonOrder />
+        ) : orders && orders?.rows?.length > 0 ? (
+          <TabsContent value={activeTab}>
+            {
+              <div className="overflow-auto mt-4">
+                <table className="w-full border-collapse text-sm">
+                  <thead>
+                    <tr>
                       <th
-                        key={col.key}
-                        className="text-center py-2 whitespace-nowrap"
+                        className={cn(
+                          classDirestion,
+                          "py-2 whitespace-nowrap px-2"
+                        )}
                       >
-                        {col.label}
+                        {t("nameProducts")}
                       </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders?.rows?.map((order: IOrder) => (
-                    <tr key={order.id} className="text-center border-t">
-                      {columns.map((col) => (
-                        <td
-                          key={col.key}
-                          className="py-2 whitespace-nowrap px-4"
+                      <th
+                        className={cn(
+                          classDirestion,
+                          "py-2 whitespace-nowrap px-2"
+                        )}
+                      >
+                        {t("dateOrder")}
+                      </th>
+                      <th
+                        className={cn(
+                          classDirestion,
+                          "py-2 whitespace-nowrap px-2"
+                        )}
+                      >
+                        {t("status")}
+                      </th>
+                      {activeTab === "New" && (
+                        <th
+                          className={cn(
+                            classDirestion,
+                            "py-2 whitespace-nowrap px-2"
+                          )}
                         >
-                          {col.key === "name" ? (
-                            "ahmed"
-                          ) : col.key === "status" ? (
-                            <span
-                              className={cn(
-                                "p-1 rounded-full px-6 font-semibold",
-                                order.status === "New"
-                                  ? "bg-yellow-500"
-                                  : order.status === "Done"
-                                  ? "bg-green-500"
-                                  : order?.status === "Canceled"
-                                  ? "bg-blue-500"
-                                  : "bg-red-500"
-                              )}
-                            >
-                              {order.status}
-                            </span>
-                          ) : col.key === "action" ? (
+                          {t("cancelOrder")}
+                        </th>
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders?.rows?.map((order: IOrder) => (
+                      <tr key={order.id} className="border-t">
+                        <td className={cn(classDirestion, "py-2 px-2")}>
+                          <span className="whitespace-nowrap">
+                            {extractItemNamesByLanguage(order?.details, locale)}
+                          </span>
+                        </td>
+                        <td className={cn(classDirestion, "py-2 px-2")}>
+                          {new Date(order?.dateAdd).toLocaleDateString()}
+                        </td>
+                        <td className={cn(classDirestion, "py-2 px-2")}>
+                          <span
+                            className={cn(
+                              "p-1 rounded-full px-6 font-semibold",
+                              order.status === "New"
+                                ? "bg-yellow-500"
+                                : order.status === "Done"
+                                ? "bg-green-500"
+                                : order?.status === "Canceled"
+                                ? "bg-blue-500"
+                                : "bg-red-500"
+                            )}
+                          >
+                            {order.status}
+                          </span>
+                        </td>
+                        {activeTab === "New" && (
+                          <td
+                            className={cn(
+                              classDirestion,
+                              "py-2 px-2 cursor-pointer"
+                            )}
+                          >
                             <Button
                               size="sm"
-                              className="bg-red-500"
-                              onClick={() => openCancelDialog(order.id)}
+                              className="bg-red-500 cursor-pointer"
+                              onClick={() => openCancelDialog(order)}
                             >
                               {locale === "ar" ? "إلغاء" : "Cancel"}
                             </Button>
-                          ) : (
-                            order?.dateAdd
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          }
-        </TabsContent>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            }
+          </TabsContent>
+        ) : (
+          ""
+        )}
       </Tabs>
 
       <DialogConfirmCancel
         open={openDialog}
         onClose={closeDialog}
         confirmCancel={confirmCancel}
+        loadingCancelOrder={loadingCancelOrder}
       />
-      <ButtonPagination
-        totalPages={orders?.paginationInfo?.totalPagesCount || 1}
-      />
+      {orders && (
+        <ButtonPagination
+          totalPages={orders?.paginationInfo?.totalPagesCount || 1}
+        />
+      )}
     </div>
   );
 }

@@ -148,7 +148,18 @@
     "checkCodeDiscount": "تحقق",
     "codeAvailabe": "الكود متاح",
     "codeNotAvailable": "هذا الكود غير متاح",
-    "enterCity": "اختر المدينة"
+    "enterCity": "اختر المدينة",
+    "noFoundOrerYet": "لا توجد طلبات بعد.",
+    "New": "جديد",
+    "Pending": "قيد المراجعة",
+    "Done": "تم التوصيل",
+    "Canceled": "تم الإلغاء",
+    "nameProducts": "اسم المنتج",
+    "dateOrder": "تاريخ الطلب",
+    "status": "الحالة",
+    "cancelOrder": "إلغاء الطلب",
+    "orderCanceledSuccessfully": "تم إلغاء الطلب بنجاح",
+    "errorOccurDuringEditOrder": "حدث خطأ اثناء تحديث حالة الطلب"
   },
   "cart": {
     "cart": "عربة التسوق",

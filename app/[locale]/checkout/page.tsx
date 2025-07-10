@@ -27,7 +27,7 @@ import { toast } from "sonner";
 import { fetchCity } from "@/redux/features/citySlice";
 import { formatCurrency } from "@/lib/formCurrency";
 export default function Checkout() {
-  const { clearCart, cart, totalPriceWithDiscount, totalPriceWithOutDiscount } =
+  const {  cart, totalPriceWithDiscount, totalPriceWithOutDiscount } =
     useCart();
   const t = useTranslations("order");
   const [openDialog, setOpenDialog] = useState(false);
@@ -55,6 +55,7 @@ export default function Checkout() {
     control,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors, isValid },
   } = useForm<IUser>({
     defaultValues: {
@@ -65,7 +66,25 @@ export default function Checkout() {
       address: "",
     },
   });
-
+   useEffect(() => {
+      setValue("email", user?.data?.email);
+      setValue("userName", user?.data?.userName);
+      setValue("phoneNumber", user?.data?.phoneNumber);
+      setValue("phoneNumber2", user?.data?.phoneNumber2);
+      setValue("cityId", String(user?.data?.cityId));
+      setValue("address", user?.data?.address);
+    }, [
+      setValue,
+      user?.data?.address,
+      user?.data?.cityId,
+      user?.data?.email,
+      user?.data?.phoneNumber,
+      user?.data?.phoneNumber2,
+      user?.data?.userName,
+      city,
+      locale,
+   ]);
+  
   const checkOnCodeDiscount = async () => {
     setLoadingCode(true);
     const response = await CheckOnDiscountCodeApi(code, user?.data?.id);
@@ -157,7 +176,6 @@ export default function Checkout() {
     const response = await CreateOrderApi(newData);
     if (response?.status === 200) {
       router.replace("/success-checkout");
-      clearCart();
     } else {
       toast.error("faild in create order");
     }
@@ -293,8 +311,8 @@ export default function Checkout() {
                 </Select>
               )}
             />
-            {errors.city && (
-              <p className="text-red-500 text-xs">{errors.city.message}</p>
+            {errors.cityId && (
+              <p className="text-red-500 text-xs">{errors.cityId.message}</p>
             )}
           </div>
           <div className="w-full flex flex-col gap-2">
