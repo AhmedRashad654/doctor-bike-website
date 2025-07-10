@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 type CartItem = {
@@ -30,13 +31,15 @@ type CartContextType = {
   clearCart: () => void;
   isInCart: (id: string | number, type?: string) => boolean;
   totalItems: number;
-  totalPrice: number;
+  totalPriceWithDiscount: number;
+  totalPriceWithOutDiscount: number;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const t = useTranslations("context");
   useEffect(() => {
     const stored = localStorage.getItem("cart");
     if (stored) {
@@ -56,7 +59,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         return [...prev, { ...item, quantity: 0, quantityForColor: 1 }];
       }
     });
-    toast.info("تم إضافة المنتج إلى عربة التسوق");
+    toast.info("addProductToCartSuccess");
   };
 
   const removeFromCart = (id: string | number, type?: string) => {
@@ -65,7 +68,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       setCart((prev) => prev.filter((item) => item.id !== id));
     }
-    toast.info("تم حذف المنتج من عربة التسوق");
+    toast.info("removeProductFromCartSuccess");
   };
   const increaseQty = (id: string | number, stock: number, type?: string) => {
     let canIncrease = false;
@@ -93,9 +96,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     );
     setTimeout(() => {
       if (canIncrease) {
-        toast.info("تم زيادة الكمية");
+        toast.info(t("increaseQty"));
       } else {
-        toast.error("الكمية المطلوبة غير متوفرة في المخزون");
+        toast.error(t("quantityReuiredNotFoundInStock"));
       }
     }, 0);
   };
@@ -125,7 +128,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
     // بعد setCart (في نفس الرفرفة) نعرض التوست
     setTimeout(() => {
-      if (decreased) toast.info("تم تقليل الكمية");
+      if (decreased) toast.info(t("decreaseQty"));
     }, 0);
   };
 
@@ -160,13 +163,29 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       return sum + (item.quantity || 0);
     }
   }, 0);
-  
-  const totalPrice = cart.reduce((sum, item) => {
-    if (item.isOrderSize) {
-      return sum + (item.priceForColor || 0) * (item.quantityForColor || 0);
-    } else {
-      return sum + (item.normailPrice || 0) * (item.quantity || 0);
-    }
+  const totalPriceWithOutDiscount = cart.reduce((sum, item) => {
+    const price = item.isOrderSize
+      ? item.priceForColor > 0
+        ? item.priceForColor
+        : item.normailPrice
+      : item.normailPrice;
+    const quantity = item.isOrderSize
+      ? item.quantityForColor || 0
+      : item.quantity || 0;
+    return sum + price * quantity;
+  }, 0);
+
+  const totalPriceWithDiscount = cart.reduce((sum, item) => {
+    const price = item.isOrderSize
+      ? item.priceForColor > 0
+        ? item.priceForColor
+        : item.normailPrice
+      : item.normailPrice;
+    const quantity = item.isOrderSize
+      ? item.quantityForColor || 0
+      : item.quantity || 0;
+    const discount = item.discount || 0;
+    return sum + (price - discount) * quantity;
   }, 0);
 
   return (
@@ -181,7 +200,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         clearCart,
         isInCart,
         totalItems,
-        totalPrice,
+        totalPriceWithOutDiscount,
+        totalPriceWithDiscount,
       }}
     >
       {children}

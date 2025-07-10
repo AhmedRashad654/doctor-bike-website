@@ -13,6 +13,7 @@ import { ForgetPasswordUser } from "@/services/auth/auth";
 import { toast } from "sonner";
 import { setEnableChangePassword, setOTP } from "@/redux/features/userSlice";
 import { IUser } from "@/types/user/IUser";
+import { useTranslations } from "next-intl";
 
 export default function Otp() {
   const [timeLeft, setTimeLeft] = useState(60);
@@ -20,6 +21,7 @@ export default function Otp() {
   const userOTP = useAppSelector((state) => state?.user?.otp);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const t = useTranslations("auth")
   // decrease count
   useEffect(() => {
     if (timeLeft > 0) {
@@ -43,9 +45,9 @@ export default function Otp() {
     }
   };
   const handleVerificationCode = () => {
-    if (otp?.length < 4) return alert("رمز ال OTP غير مكتمل");
+    if (otp?.length < 4) return alert(t("otpNotComplete"));
     if (Number(otp) !== Number(userOTP?.otp)) {
-      return toast.error("رمز ال OTP غير صحيح");
+      return toast.error(t("otpNotMatch"));
     } else {
       dispatch(setEnableChangePassword(true));
       router.push("/success-otp");
@@ -56,9 +58,9 @@ export default function Otp() {
     <div className="flex flex-col gap-5 items-center justify-center py-[20px] w-full min-h-[100vh]">
       <div className="flex flex-col gap-[20px] p-4 w-[340px] md:w-[450px]">
         <div className="flex flex-col items-center gap-[10px]">
-          <h5 className="font-bold">التحقق من الرمز </h5>
+          <h5 className="font-bold"> {t("checkOnOtp")}</h5>
           <h6 className="text-blue-600 dark:text-blue-400">
-            رجاء ادخال رمز التحقق
+          {t("pleaseEnterOtp")}
           </h6>
         </div>
         <div className="w-full flex justify-center">
@@ -82,15 +84,16 @@ export default function Otp() {
         </div>
 
         <Button onClick={handleVerificationCode} className="cursor-pointer">
-          تحقق
+       {t("check")}
         </Button>
         <div className="flex flex-col gap-5 items-center">
-          <h6>لم يصبلك رمز التحقق ؟</h6>
+          <h6>{t("notHaveOtp") }</h6>
 
           {timeLeft > 0 ? (
             <h6 className="font-bold">
               {" "}
-              إعادة الإرسال خلال 00:
+              {/* إعادة الإرسال خلال 00: */}
+              {t("repeatSendThrought")}
               {timeLeft < 10 ? `0${timeLeft}` : timeLeft}
             </h6>
           ) : (
@@ -98,7 +101,7 @@ export default function Otp() {
               className="font-bold cursor-pointer"
               onClick={handleRepeatSendOTP}
             >
-              أعد الإرسال الآن
+           {t("repeatSendNow")}
             </h6>
           )}
         </div>

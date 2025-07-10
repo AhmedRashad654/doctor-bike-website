@@ -12,9 +12,11 @@ import { IUser } from "@/types/user/IUser";
 import { useAppSelector } from "@/redux/hooksRedux";
 import { useRouter } from "next/navigation";
 import { RegisterUser } from "@/services/auth/auth";
+import { useTranslations } from "next-intl";
 export default function Register() {
   const user = useAppSelector((state) => state?.user?.data);
   const router = useRouter();
+  const t = useTranslations("auth");
   // handle login
   const {
     control,
@@ -49,19 +51,19 @@ export default function Register() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-[340px] md:w-[450px] flex flex-col items-center gap-5">
-        <h2 className="text-2xl font-semibold">مرحبا بك !</h2>
+        <h2 className="text-2xl font-semibold"> {t("welcomefirst")}</h2>
 
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="email" className="mb-1 block">
-            البريد الالكتروني
+            {t("email")}
           </Label>
           <Controller
             control={control}
             name="email"
-            rules={{ required: "البريد الالكتروني مطلوب" }}
+            rules={{ required: t("emailRequired") }}
             render={({ field }) => (
               <Input
-                placeholder="ادخل البريد الالكتروني"
+                placeholder={t("enterEmail")}
                 type="email"
                 className="py-5"
                 {...field}
@@ -75,24 +77,23 @@ export default function Register() {
 
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="password" className="mb-1 block">
-            كلمة المرور
+            {t("password")}
           </Label>
           <Controller
             control={control}
             name="password"
             rules={{
-              required: "كلمة المرور مطلوبة",
+              required: t("passwordRequired"),
               pattern: {
                 value:
                   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                message:
-                  "كلمة المرور يجب أن تحتوي على حرف كبير وصغير، رقم، ورمز (@،$،!...) وألا تقل عن 8 أحرف.",
+                message: t("passwordPattern"),
               },
             }}
             render={({ field }) => (
               <Input
                 id="password"
-                placeholder="ادخل كلمة المرور"
+                placeholder={t("enterPassword")}
                 type="password"
                 className="py-5"
                 {...field}
@@ -106,20 +107,19 @@ export default function Register() {
 
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="password" className="mb-1 block">
-            تاكيد كلمة المرور
+            {t("confirmPassword")}
           </Label>
           <Controller
             control={control}
             name="confirmPassword"
             rules={{
-              required: " تاكيد كلمة المرور مطلوبة",
+              required: t("confirmPasswordRequired"),
               validate: (value) =>
-                value === password ||
-                "كلمة المرور و تاكيد كلمة المرور غير متطابقين",
+                value === password || t("passwordAndConfirmPasswordNotSame"),
             }}
             render={({ field }) => (
               <Input
-                placeholder="ادخل تاكيد كلمة المرور"
+                placeholder={t("enterConfirmPassword")}
                 type="password"
                 className="py-5"
                 {...field}
@@ -132,25 +132,21 @@ export default function Register() {
             </p>
           )}
         </div>
-        <div className="w-full -mt-2">
-          <Link
-            href="/forget-password"
-            className="text-sm font-bold cursor-pointer text-blue-600 dark:text-white hover:underline"
-          >
-            هل نسيت كلمة المرور؟
-          </Link>
-        </div>
 
-        <Button type="submit" className="w-full font-bold cursor-pointer" disabled={isSubmitting}>
-          {isSubmitting ? "جاري التحميل..." : " انشاء حساب"}
+        <Button
+          type="submit"
+          className="w-full font-bold cursor-pointer"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? t("loading") : t("register")}
         </Button>
         <div className="text-sm">
-          لديك حساب؟
+          {t("haveAccount")}
           <Link
             href={"/sign-in"}
             className="text-blue-600 dark:text-blue-400 font-semibold hover:underline cursor-pointer"
           >
-            تسجيل الدخول
+            {t("login")}
           </Link>
         </div>
       </div>

@@ -10,7 +10,6 @@ import { GetContact } from "@/services/contact/contact";
 
 export default async function HeroSection() {
   const data = await GetContact();
-  console.log(data);
   return (
     <div className="min-h-[750px] relative">
       <SwiperHeroSection />

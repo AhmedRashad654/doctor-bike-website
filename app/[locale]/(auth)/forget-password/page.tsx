@@ -10,12 +10,13 @@ import { IUser } from "@/types/user/IUser";
 import { ForgetPasswordUser } from "@/services/auth/auth";
 import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
 import { setOTP } from "@/redux/features/userSlice";
+import { useTranslations } from "next-intl";
 
 export default function ForgetPassword() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state?.user?.data);
-
+  const t = useTranslations("auth");
   const {
     control,
     handleSubmit,
@@ -46,19 +47,19 @@ export default function ForgetPassword() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-[340px] md:w-[450px] flex flex-col items-center gap-5">
-        <h2 className="text-2xl font-semibold"> هيا بنا نبدأ</h2>
-        <p className="text-center">سنقوم بارسال رمز تحقق للتأكيد علي بريدك الإلكتروني</p>
+        <h2 className="text-2xl font-semibold"> {t("letsStart")}</h2>
+        <p className="text-center">{t("weSendoptToYourEmail")}</p>
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="email" className="mb-1 block">
-            البريد الالكتروني
+            {t("email")}
           </Label>
           <Controller
             control={control}
             name="email"
-            rules={{ required: "البريد الالكتروني مطلوب" }}
+            rules={{ required: t("emailRequired") }}
             render={({ field }) => (
               <Input
-                placeholder="ادخل البريد الالكتروني"
+                placeholder={t("enterEmail")}
                 type="email"
                 className="py-5"
                 {...field}
@@ -70,19 +71,23 @@ export default function ForgetPassword() {
           )}
         </div>
         <div className="text-sm">
-          النقر علي التالي يعني أنك قرأت ووافقت علي
+          {t("byClickHereMainYouAccept")}
           <span> </span>
           <Link
             href={"/terms-policy"}
             className="text-blue-600 dark:text-blue-400 font-semibold hover:underline cursor-pointer"
           >
-            الأحكام والشروط
+            {t("TermsAndCondition")}
           </Link>
           <span> </span>
-          الخاصة باستخدام تطبيق doctorBike
+          {t("specialWithDoctorBike")}
         </div>
-        <Button type="submit" className="w-full font-bold cursor-pointer" disabled={isSubmitting}>
-          {isSubmitting ? "الرجاء الانتظار..." : "التالي"}
+        <Button
+          type="submit"
+          className="w-full font-bold cursor-pointer"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? t("loading") : t("next")}
         </Button>
       </div>
     </form>

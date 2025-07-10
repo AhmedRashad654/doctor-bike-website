@@ -79,7 +79,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={locale === "ar" ? "rtl" : "ltr"}
+      className={locale === "en" ? "ltr" : "rtl"}
       suppressHydrationWarning
     >
       <body className={`${fontClass} antialiased`}>

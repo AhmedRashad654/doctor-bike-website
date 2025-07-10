@@ -10,11 +10,13 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
 import { useRouter } from "@/i18n/navigation";
 import { setResetOTP } from "@/redux/features/userSlice";
 import { ChangePasswordUserApi } from "@/services/auth/auth";
+import { useTranslations } from "next-intl";
 
 export default function ChangePassword() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const userOTP = useAppSelector((state) => state?.user?.otp);
+  const t = useTranslations("auth");
   const {
     control,
     handleSubmit,
@@ -58,28 +60,28 @@ export default function ChangePassword() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-[340px] md:w-[450px] flex flex-col items-center gap-5">
-        <h2 className="text-2xl font-semibold"> تغيير كلمة المرور</h2>
+        <h2 className="text-2xl font-semibold"> {t("changePassword")}</h2>
 
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="password" className="mb-1 block">
-            كلمة المرور
+            {t("password")}
           </Label>
           <Controller
             control={control}
             name="newPassword"
             rules={{
-              required: "كلمة المرور مطلوبة",
+              required: t("passwordRequired"),
               pattern: {
                 value:
                   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                message:
-                  "كلمة المرور يجب أن تحتوي على حرف كبير وصغير، رقم، ورمز (@،$،!...) وألا تقل عن 8 أحرف.",
+                message: t("passwordPattern"),
+                // "كلمة المرور يجب أن تحتوي على حرف كبير وصغير، رقم، ورمز (@،$،!...) وألا تقل عن 8 أحرف.",
               },
             }}
             render={({ field }) => (
               <Input
                 id="password"
-                placeholder="ادخل كلمة المرور"
+                placeholder={t("enterPassword")}
                 type="password"
                 className="py-5"
                 {...field}
@@ -93,19 +95,19 @@ export default function ChangePassword() {
 
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="confirmPassword" className="mb-1 block">
-            تاكيد كلمة المرور
+            {t("confirmPassword")}
           </Label>
           <Controller
             control={control}
             name="confirmPassword"
             rules={{
-              required: "تأكيد كلمة المرور مطلوب",
+              required: t("confirmPasswordRequired"),
               validate: (value) =>
-                value === password || "كلمة المرور غير متطابقة",
+                value === password || t("passwordAndConfirmPasswordNotSame"),
             }}
             render={({ field }) => (
               <Input
-                placeholder=" ادخل تاكيد كلمة المرور"
+                placeholder={t("enterConfirmPassword")}
                 type="password"
                 className="py-5"
                 {...field}
@@ -124,7 +126,7 @@ export default function ChangePassword() {
           className="w-full font-bold cursor-pointer"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "   الرجاء الانتظار... " : "تفيير كلمة المرور"}
+          {isSubmitting ? t("loading") : t("changePassword")}
         </Button>
       </div>
     </form>

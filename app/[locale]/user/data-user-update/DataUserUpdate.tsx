@@ -18,13 +18,14 @@ import { UpdateProfileUser } from "@/services/auth/auth";
 import { setUser } from "@/redux/features/userSlice";
 import { toast } from "sonner";
 import { fetchCity } from "@/redux/features/citySlice";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function DataUserUpdate() {
   const user = useAppSelector((state) => state?.user);
   const city = useAppSelector((state) => state?.city);
   const locale = useLocale();
   const dispatch = useAppDispatch();
+  const t = useTranslations("auth");
 
   // handle login
   const {
@@ -79,8 +80,6 @@ export default function DataUserUpdate() {
     }
   }, [city?.status, dispatch]);
 
-
-
   return (
     <form
       className="min-h-[calc(100vh-160px)] flex items-center justify-center py-6"
@@ -89,15 +88,15 @@ export default function DataUserUpdate() {
       <div className="w-[340px] md:w-[450px] flex flex-col items-center gap-5">
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="email" className="mb-1 block">
-            البريد الالكتروني
+            {t("email")}
           </Label>
           <Controller
             control={control}
             name="email"
-            rules={{ required: "البريد الالكتروني مطلوب" }}
+            rules={{ required: t("emailRequired") }}
             render={({ field }) => (
               <Input
-                placeholder="ادخل البريد الالكتروني"
+                placeholder={t("enterEmail")}
                 type="email"
                 className="py-5"
                 {...field}
@@ -110,15 +109,15 @@ export default function DataUserUpdate() {
         </div>
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="name" className="mb-1 block">
-            الاسم
+         {t("name")}
           </Label>
           <Controller
             control={control}
             name="userName"
-            rules={{ required: " الاسم مطلوب" }}
+            rules={{ required:t("nameRequired") }}
             render={({ field }) => (
               <Input
-                placeholder="ادخل  الاسم"
+                placeholder={t("enterName")}
                 type="text"
                 className="py-5"
                 {...field}
@@ -131,14 +130,14 @@ export default function DataUserUpdate() {
         </div>{" "}
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="phoneNumber" className="mb-1 block">
-            رقم الهاتف
+          {t("phoneNumber")}
           </Label>
           <Controller
             control={control}
             name="phoneNumber"
             render={({ field }) => (
               <Input
-                placeholder="ادخل  رقم الهاتف"
+                placeholder={t("enterPhoneNumber")}
                 type="text"
                 className="py-5"
                 {...field}
@@ -152,14 +151,14 @@ export default function DataUserUpdate() {
         </div>{" "}
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="phoneNumber2" className="mb-1 block">
-            رقم الهاتف البديل
+          {t("phoneNumber2")}
           </Label>
           <Controller
             control={control}
             name="phoneNumber2"
             render={({ field }) => (
               <Input
-                placeholder="ادخل  رقم الهاتف البديل"
+                placeholder={t("enterPhoneNumber2")}
                 type="text"
                 className="py-5"
                 {...field}
@@ -175,7 +174,7 @@ export default function DataUserUpdate() {
         </div>{" "}
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="cityId" className="mb-1 block">
-            المدينة
+            {t("city")}
           </Label>
           <Controller
             control={control}
@@ -190,7 +189,7 @@ export default function DataUserUpdate() {
                 }
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="ادخل المدينة" />
+                  <SelectValue placeholder={t("enterCity")} />
                 </SelectTrigger>
                 <SelectContent>
                   {city?.data
@@ -218,14 +217,14 @@ export default function DataUserUpdate() {
         </div>
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="address" className="mb-1 block">
-            العنوان
+       {t("address")}
           </Label>
           <Controller
             control={control}
             name="address"
             render={({ field }) => (
               <Textarea
-                placeholder="ادخل العنوان بالتفصيل ..."
+                placeholder={t("enterAddressWithDetails")}
                 className="py-2"
                 {...field}
                 value={field.value ?? ""}
@@ -241,7 +240,7 @@ export default function DataUserUpdate() {
           className="w-full font-bold cursor-pointer"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "جاري التحميل" : "حفظ"}
+          {isSubmitting ? t("loading") : t("save")}
         </Button>
       </div>
     </form>

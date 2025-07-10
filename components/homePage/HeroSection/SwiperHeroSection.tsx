@@ -38,7 +38,6 @@ export default function SwiperHeroSection() {
       showPagination &&
       paginationRef.current
     ) {
-
       if (
         swiperRef.current.params.navigation &&
         typeof swiperRef.current.params.navigation !== "boolean"
@@ -84,14 +83,21 @@ export default function SwiperHeroSection() {
         }}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <Image src={slide1} alt="slide1" />
+        <SwiperSlide className="heroSwiperSlide">
+          <Image
+            src={slide1}
+            alt="slide1"
+            className="h-[750px] object-cover w-[100%]"
+          />
         </SwiperSlide>
-        <SwiperSlide>
-          <Image src={slide2} alt="slide2" />
+        <SwiperSlide className="heroSwiperSlide">
+          <Image
+            src={slide2}
+            alt="slide2"
+            className="h-[750px] object-cover w-[100%]"
+          />
         </SwiperSlide>
       </Swiper>
-
 
       <div
         ref={prevRef}

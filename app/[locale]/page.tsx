@@ -3,6 +3,7 @@ import HeroSection from "@/components/homePage/HeroSection/HeroSection";
 import MainCategory from "@/components/homePage/MainCategory/MainCategory";
 import ProductMoreSales from "@/components/homePage/ProductMoreSales/ProductMoreSales";
 import { SearchParams } from "./products/[id]/page";
+import Advertisements from "@/components/homePage/advertisements/Advertisements";
 
 export default async function Home({
   searchParams,
@@ -16,6 +17,7 @@ export default async function Home({
       <HeroSection />
       <MainCategory />
       <ProductMoreSales page={page} />
+      <Advertisements />
       <Footer />
     </div>
   );

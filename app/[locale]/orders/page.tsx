@@ -1,53 +1,45 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import DialogConfirmCancel from "./DialogConfirmCancel";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import Empty from "@/components/ui/Empty";
 import emptyImage from "@/public/empty.png";
 import ButtonPagination from "@/components/pagination/ButtonBagination";
-type OrderStatus = "جارية" | "مكتملة" | "ملغية";
-
-interface Order {
-  id: string;
-  products: string[];
-  date: string;
-  status: OrderStatus;
-}
-
-const sampleOrders: Order[] = [
-  {
-    id: "1",
-    products: ["دراجة هوائية", "خوذة حماية"],
-    date: "2023-07-01",
-    status: "جارية",
-  },
-  {
-    id: "2",
-    products: ["مضخة هواء"],
-    date: "2023-06-20",
-    status: "مكتملة",
-  },
-  {
-    id: "3",
-    products: ["إطار دراجة"],
-    date: "2023-06-25",
-    status: "ملغية",
-  },
-];
+import { useAppSelector } from "@/redux/hooksRedux";
+import { useRouter } from "@/i18n/navigation";
+import { GetMyOrdersByStatus } from "@/services/orders/orders";
+import { IOrder } from "@/types/order/IOrder";
+import { useSearchParams } from "next/navigation";
+type OrderStatus = "New" | "Pending" | "Done" | "canceled";
 
 export default function Orders() {
-  const [activeTab, setActiveTab] = useState<OrderStatus>("جارية");
+  const [activeTab, setActiveTab] = useState<OrderStatus>("New");
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") || 1;
+  const t = useTranslations("order");
+  const user = useAppSelector((state) => state?.user?.data);
+  const [orders, setOrders] = useState<{
+    rows: IOrder[];
+    paginationInfo: {
+      totalPagesCount: number;
+    };
+  }>();
   const locale = useLocale();
+  const router = useRouter();
 
-  const filteredOrders = sampleOrders.filter(
-    (order) => order.status === activeTab
-  );
-
+  useEffect(() => {
+    async function getOrders() {
+      const response = await GetMyOrdersByStatus(activeTab, user?.id, page);
+      setOrders(response?.data);
+      console.log(response);
+    }
+    getOrders();
+  }, [activeTab, user?.id, page]);
   const baseColumns =
     locale === "ar"
       ? [
@@ -62,13 +54,13 @@ export default function Orders() {
         ];
 
   const columns =
-    activeTab === "جارية"
-      ? locale !== "ar"
-        ? [...baseColumns, { key: "action", label: "cancel order" }]
-        : [{ key: "action", label: "إلغاء الطلب" }, ...baseColumns]
+    activeTab === "New"
+      ? locale !== "en"
+        ? [{ key: "action", label: "إلغاء الطلب" }, ...baseColumns]
+        : [...baseColumns, { key: "action", label: "cancel order" }]
       : baseColumns;
 
-  const openCancelDialog = (orderId: string) => {
+  const openCancelDialog = (orderId: number) => {
     setSelectedOrderId(orderId);
     setOpenDialog(true);
   };
@@ -82,25 +74,34 @@ export default function Orders() {
   const closeDialog = () => {
     setOpenDialog(false);
   };
-  if (filteredOrders?.length === 0)
+  // protected route
+  useEffect(() => {
+    if (!user?.id) {
+      router.push("/");
+    }
+  }, [router, user?.id]);
+  if (orders?.rows?.length === 0)
     return <Empty emptyImage={emptyImage} text={"لا يوجد طلبات حاليا"} />;
   return (
     <div className="max-w-7xl mx-auto p-6 pt-32 md:pt-36">
-      <h1 className="text-2xl font-bold mb-6 text-center">طلباتي</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">{t("myOrders")}</h1>
       <Tabs
         value={activeTab}
         onValueChange={(value) => setActiveTab(value as OrderStatus)}
         className="mb-6"
       >
         <TabsList className="w-full justify-center bg-gray-100 dark:bg-gray-800 rounded-md p-1">
+          <TabsTrigger value="جديدة" className="cursor-pointer">
+            {t("New")}
+          </TabsTrigger>
           <TabsTrigger value="جارية" className="cursor-pointer">
-            الطلبات الجارية
+            {t("Pending")}
           </TabsTrigger>
           <TabsTrigger value="مكتملة" className="cursor-pointer">
-            الطلبات المكتملة
+            {t("Done")}
           </TabsTrigger>
           <TabsTrigger value="ملغية" className="cursor-pointer">
-            الطلبات الملغية
+            {t("canceled")}
           </TabsTrigger>
         </TabsList>
 
@@ -121,7 +122,7 @@ export default function Orders() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredOrders.map((order) => (
+                  {orders?.rows?.map((order: IOrder) => (
                     <tr key={order.id} className="text-center border-t">
                       {columns.map((col) => (
                         <td
@@ -129,15 +130,17 @@ export default function Orders() {
                           className="py-2 whitespace-nowrap px-4"
                         >
                           {col.key === "name" ? (
-                            order.products.join("، ")
+                            "ahmed"
                           ) : col.key === "status" ? (
                             <span
                               className={cn(
                                 "p-1 rounded-full px-6 font-semibold",
-                                order.status === "جارية"
+                                order.status === "New"
                                   ? "bg-yellow-500"
-                                  : order.status === "مكتملة"
+                                  : order.status === "Done"
                                   ? "bg-green-500"
+                                  : order?.status === "Canceled"
+                                  ? "bg-blue-500"
                                   : "bg-red-500"
                               )}
                             >
@@ -152,7 +155,7 @@ export default function Orders() {
                               {locale === "ar" ? "إلغاء" : "Cancel"}
                             </Button>
                           ) : (
-                            order[col.key as keyof Order]
+                            order?.dateAdd
                           )}
                         </td>
                       ))}
@@ -170,7 +173,9 @@ export default function Orders() {
         onClose={closeDialog}
         confirmCancel={confirmCancel}
       />
-      <ButtonPagination totalPages={6} />
+      <ButtonPagination
+        totalPages={orders?.paginationInfo?.totalPagesCount || 1}
+      />
     </div>
   );
 }

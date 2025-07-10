@@ -1,26 +1,29 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import instagem from "@/public/instagram.png";
 import whatsapp from "@/public/logos_whatsapp-icon.png";
-import {  Phone } from "lucide-react";
+import { Phone } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { FaXTwitter } from "react-icons/fa6";
 
-export default function ContactUs() {
+export default async function ContactUs() {
+  const t = await getTranslations("contactUs");
   return (
-    <main className="min-h-screen py-12 px-4 md:px-0 flex justify-center items-start bg-background text-foreground pt-36">
+    <main className="min-h-screen py-6 md:py-12 px-4 md:px-0 flex justify-center items-start bg-background text-foreground">
       <Card className="w-full max-w-2xl shadow-md border">
         <CardHeader>
           <CardTitle className="text-2xl text-center font-bold mb-4">
-            اتصل بنا
+            {t("contactUs")}
           </CardTitle>
         </CardHeader>
 
         <CardContent className="space-y-6 leading-loose">
-          <p>يسعدنا تواصلك معنا! يمكنك التواصل معنا عبر الوسائل التالية:</p>
+          {/* <p>يسعدنا تواصلك معنا! يمكنك التواصل معنا عبر الوسائل التالية:</p> */}
+          {t("happyToContactWith")}
 
           <ul className="space-y-4">
             <li className="flex items-center justify-between">
-              <span className="font-medium">رقم الهاتف:</span>
+              <span className="font-medium"> {t("phoneNumber")}:</span>
               <a
                 href="tel:+201234567890"
                 className="text-blue-600 dark:text-blue-400 hover:underline"
@@ -31,7 +34,7 @@ export default function ContactUs() {
             </li>
 
             <li className="flex items-center justify-between">
-              <span className="font-medium">واتساب:</span>
+              <span className="font-medium">{t("whatsApp")}:</span>
               <a
                 href="https://wa.me/201234567890"
                 target="_blank"
@@ -43,12 +46,12 @@ export default function ContactUs() {
                   alt="whatsApp"
                   className="w-[25px] h-[25px]"
                 />
-                تواصل عبر واتساب
+                {t("contactThroughWhatsApp")}
               </a>
             </li>
 
             <li className="flex items-center justify-between">
-              <span className="font-medium">منصة X:</span>
+              <span className="font-medium">{t("platformX")} :</span>
               <a
                 href="https://x.com/yourprofile"
                 target="_blank"
@@ -61,7 +64,7 @@ export default function ContactUs() {
             </li>
 
             <li className="flex items-center justify-between">
-              <span className="font-medium">Instagram:</span>
+              <span className="font-medium">{t("instagram")}:</span>
               <a
                 href="https://instagram.com/yourprofile"
                 target="_blank"
@@ -79,11 +82,11 @@ export default function ContactUs() {
           </ul>
 
           <p className="text-sm text-muted-foreground mt-8 text-center">
-            فريق doctor bike متواجد دائمًا لمساعدتك والإجابة على استفساراتك.
+            {/* فريق doctor bike متواجد دائمًا لمساعدتك والإجابة على استفساراتك. */}
+            {t("teamDoctorBikeAlwaysAvailable")}
           </p>
         </CardContent>
       </Card>
     </main>
   );
 }
-

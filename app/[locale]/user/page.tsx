@@ -6,34 +6,31 @@ import ChangePasswordUserLogin from "./change-password-user-login/ChangePassword
 import { useAppSelector } from "@/redux/hooksRedux";
 import { useRouter } from "@/i18n/navigation";
 import Logout from "./logout/Logout";
+import { useTranslations } from "next-intl";
 
 export default function User() {
-  const user = useAppSelector((state) => state?.user);
+  const user = useAppSelector((state) => state?.user?.data);
   const router = useRouter();
+  const t = useTranslations("auth")
   // protected Routed
-
   useEffect(() => {
-    if (user?.status !== "idle" && user?.status !== "loading") {
-      const notLoggedIn = !user?.data?.id;
-
-      if (notLoggedIn) {
-        router.replace("/sign-in");
-      }
+    if (!user?.id) {
+      router.replace("/sign-in");
     }
-  }, [user?.status, user?.data?.id, router]);
+  }, [user, router]);
 
   return (
     <div className="min-h-[calc(100vh-100px)] flex justify-center py-6 md:py-10">
       <Tabs defaultValue="data" className="mb-6 w-full max-w-7xl px-6">
         <TabsList className="w-full flex sm:flex-row flex-col-reverse  gap-4 justify-between bg-gray-100 dark:bg-gray-800 rounded-md">
           <TabsTrigger value="logout" className="cursor-pointer font-bold">
-            تسجيل الخروج
+           {t("logout")}
           </TabsTrigger>
           <TabsTrigger value="password" className="cursor-pointer font-bold">
-            تغيير كلمة المرور
+         {t("changePassword")}
           </TabsTrigger>
           <TabsTrigger value="data" className="cursor-pointer font-bold">
-            البيانات الشخصية
+           {t("informationPersonal")}
           </TabsTrigger>
         </TabsList>
         <TabsContent value={"data"}>

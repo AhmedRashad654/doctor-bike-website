@@ -1,25 +1,23 @@
 import { BASE_API_URL } from "@/lib/constants";
 
-export const GetMainCategory = async () => {
+export const GetAdvertisments = async () => {
   const response = await fetch(
-    `${BASE_API_URL}/MainCategorys/GetAllShowMainCategories`,
+    `${BASE_API_URL}/OnlineAds/GetAllAds?StatusShow=Show`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        paginationInfo: {
-          pageIndex: 0,
-          pageSize: 0,
-        },
-      }),
+      body: JSON.stringify({}),
+      next: {
+        revalidate: 300,
+      },
     }
   );
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(
-      `Failed to fetch main category: ${response.status} - ${errorText}`
+      `Failed to fetch  advertisments : ${response.status} - ${errorText}`
     );
   }
   const data = await response.json();

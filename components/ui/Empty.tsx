@@ -9,7 +9,7 @@ export default function Empty({
   text: string;
 }) {
   return (
-    <div className="min-h-[95vh] pt-6 w-full flex flex-col gap-5 justify-center items-center">
+    <div className="min-h-[90vh] pt-6 w-full flex flex-col gap-5 justify-center items-center">
       <h4 className="text-2xl font-bold">{text}</h4>
       <Image src={emptyImage} alt="empty" />
     </div>

@@ -43,9 +43,7 @@ export const GetProductMoreSales = async (page: string | string[]) => {
         pageSize: 10,
       },
     }),
-    next: {
-      revalidate: 300,
-    },
+    cache: "no-store",
   });
   if (!response.ok) {
     const errorText = await response.text();

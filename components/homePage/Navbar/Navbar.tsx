@@ -12,13 +12,13 @@ import PartIconCartAndLength from "./PartIconCartAndLength";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useAppSelector } from "@/redux/hooksRedux";
+import { FaBorderStyle } from "react-icons/fa";
 
 export default function Navbar() {
   const t = useTranslations("home.navbar");
   const user = useAppSelector((state) => state?.user?.data);
   const pathname = usePathname();
   const isRootLocaleOnly = pathname === "/";
-
 
   return (
     <nav
@@ -55,6 +55,11 @@ export default function Navbar() {
         <div className="flex items-center gap-3 md:gap-5 text-link-active">
           <LanguageSwitcher />
           <ToggleTheme />
+          {user?.id !== "" && (
+            <Link href={"/orders"}>
+              <FaBorderStyle className="cursor-pointer w-5 h-5 hover:text-black dark:hover:text-blue-400 transition duration-300" />
+            </Link>
+          )}
           <PartIconCartAndLength />
           <Link href={user?.id !== "" ? "/user" : "/sign-in"}>
             <UserRound className="cursor-pointer hover:text-black dark:hover:text-blue-400 transition duration-300" />

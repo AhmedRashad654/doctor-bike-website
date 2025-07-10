@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Dialog,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export default function DialogConfirmCancel({
   open,
@@ -18,22 +20,24 @@ export default function DialogConfirmCancel({
   onClose: () => void;
   confirmCancel: () => void;
 }) {
+  const t = useTranslations("order");
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-center">تأكيد إلغاء الطلب</DialogTitle>
+          <DialogTitle className="text-center">
+            {" "}
+            {t("confirmCancelOrder")}
+          </DialogTitle>
         </DialogHeader>
-        <p className="mb-3 text-lg">
-          هل أنت متأكد أنك تريد إلغاء هذا الطلب؟
-        </p>
+        <p className="mb-3 text-lg">{t("areYouSureCancelOrder")}</p>
         <Separator />
         <DialogFooter className="flex justify-between">
           <Button variant="outline" onClick={onClose}>
-            إلغاء
+            {t("cancel")}
           </Button>
           <Button className="bg-red-500" onClick={confirmCancel}>
-            نعم، إلغاء الطلب
+            {t("yesCancelOrders")}
           </Button>
         </DialogFooter>
       </DialogContent>
