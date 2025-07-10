@@ -156,8 +156,8 @@ export default function Checkout() {
     setLoadingOrder(true);
     const response = await CreateOrderApi(newData);
     if (response?.status === 200) {
-      clearCart();
       router.replace("/success-checkout");
+      clearCart();
     } else {
       toast.error("faild in create order");
     }
