@@ -33,7 +33,6 @@ export default function DialogDetailsCheckout({
   const t2 = useTranslations("cart");
 
   const delivaryCity = city?.find((e) => String(e?.id) === getValues("cityId"));
-  console.log(delivaryCity);
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>

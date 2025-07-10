@@ -12,7 +12,7 @@ export default function SuccessCheckout() {
   const { clearCart } = useCart();
   useEffect(() => {
     clearCart();
-  }, [clearCart]);
+  }, []);
   return (
     <div className="flex justify-center items-center min-h-[80vh]">
       <div className="flex items-center flex-col gap-[40px] w-[340px] md:w-[450px]">
