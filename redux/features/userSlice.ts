@@ -29,7 +29,7 @@ const initialState: IUserRedux = {
     accessFailedCount: 0,
     address: null,
     block: false,
-    fullName: null,
+    fullName: "",
     phoneNumber2: null,
     typeUser: null,
     dateAdd: "",
