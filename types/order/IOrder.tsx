@@ -16,7 +16,7 @@ export interface IOrder {
   discoundCodeId?: number | null;
   discoundCodePercent?: number | null;
   discoundCode?: string | null;
-  totalPriceWithDiscoundCode: number;
+  totalPriceWithDiscoundCode: number | null;
   userAddId?: string;
   dateAdd: string;
   userUpdate?: string;

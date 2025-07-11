@@ -6,19 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { IUser } from "@/types/user/IUser";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
 import { UpdateProfileUser } from "@/services/auth/auth";
 import { setUser } from "@/redux/features/userSlice";
 import { toast } from "sonner";
-import { fetchCity } from "@/redux/features/citySlice";
 import { useLocale, useTranslations } from "next-intl";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 export default function DataUserUpdate() {
   const user = useAppSelector((state) => state?.user);
@@ -36,36 +29,28 @@ export default function DataUserUpdate() {
   } = useForm<IUser>({
     defaultValues: {
       email: "",
-      userName: "",
+      fullName: "",
       phoneNumber: "",
       phoneNumber2: "",
       cityId: "",
       address: "",
     },
   });
+
   useEffect(() => {
     setValue("email", user?.data?.email);
-    setValue("userName", user?.data?.userName);
+    setValue("fullName", user?.data?.fullName);
     setValue("phoneNumber", user?.data?.phoneNumber);
     setValue("phoneNumber2", user?.data?.phoneNumber2);
     setValue("cityId", String(user?.data?.cityId));
     setValue("address", user?.data?.address);
-  }, [
-    setValue,
-    user?.data?.address,
-    user?.data?.cityId,
-    user?.data?.email,
-    user?.data?.phoneNumber,
-    user?.data?.phoneNumber2,
-    user?.data?.userName,
-    city,
-    locale,
-  ]);
-  //   const dispatch = useAppDispatch();
+  }, [setValue, user?.data, city, locale]);
+
   const onSubmit: SubmitHandler<IUser> = async (data) => {
     const newDate = {
       ...user?.data,
       ...data,
+      cityId: Number(data?.cityId) ?? null,
       dateUpdate: new Date().toISOString(),
     };
     const response = await UpdateProfileUser(newDate, toast);
@@ -73,13 +58,6 @@ export default function DataUserUpdate() {
       dispatch(setUser(response?.data));
     }
   };
-  // fetch city
-  useEffect(() => {
-    if (city?.status === "idle") {
-      dispatch(fetchCity());
-    }
-  }, [city?.status, dispatch]);
-
   return (
     <form
       className="min-h-[calc(100vh-160px)] flex items-center justify-center py-6"
@@ -109,12 +87,12 @@ export default function DataUserUpdate() {
         </div>
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="name" className="mb-1 block">
-         {t("name")}
+            {t("name")}
           </Label>
           <Controller
             control={control}
-            name="userName"
-            rules={{ required:t("nameRequired") }}
+            name="fullName"
+            rules={{ required: t("nameRequired") }}
             render={({ field }) => (
               <Input
                 placeholder={t("enterName")}
@@ -124,13 +102,13 @@ export default function DataUserUpdate() {
               />
             )}
           />
-          {errors.userName && (
-            <p className="text-red-500 text-xs">{errors.userName.message}</p>
+          {errors.fullName && (
+            <p className="text-red-500 text-xs">{errors.fullName.message}</p>
           )}
         </div>{" "}
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="phoneNumber" className="mb-1 block">
-          {t("phoneNumber")}
+            {t("phoneNumber")}
           </Label>
           <Controller
             control={control}
@@ -151,7 +129,7 @@ export default function DataUserUpdate() {
         </div>{" "}
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="phoneNumber2" className="mb-1 block">
-          {t("phoneNumber2")}
+            {t("phoneNumber2")}
           </Label>
           <Controller
             control={control}
@@ -180,44 +158,34 @@ export default function DataUserUpdate() {
             control={control}
             name="cityId"
             render={({ field }) => (
-              <Select
-                onValueChange={field.onChange}
-                value={
-                  field.value !== undefined && field.value !== null
-                    ? String(field.value)
-                    : ""
+              <CustomSelect
+                {...field}
+                placeholder={t("enterCity")}
+                options={
+                  city?.data
+                    ?.filter((city) => city.isShow)
+                    .map((city) => ({
+                      value: String(city.id),
+                      label:
+                        locale === "ar"
+                          ? city.cityNameAr
+                          : locale === "en"
+                          ? city.cityNameEng
+                          : city.cityNameAbree,
+                    })) || []
                 }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t("enterCity")} />
-                </SelectTrigger>
-                <SelectContent>
-                  {city?.data
-                    ?.filter((city) => city.isShow === true)
-                    .map((city) => (
-                      <SelectItem key={city.id} value={String(city.id)}>
-                        {
-                          city[
-                            locale === "ar"
-                              ? "cityNameAr"
-                              : locale === "en"
-                              ? "cityNameEng"
-                              : "cityNameAbree"
-                          ]
-                        }
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+                value={field.value ?? ""}
+              />
             )}
           />
+
           {errors.cityId && (
             <p className="text-red-500 text-xs">{errors.cityId.message}</p>
           )}
         </div>
         <div className="w-full flex flex-col gap-2">
           <Label htmlFor="address" className="mb-1 block">
-       {t("address")}
+            {t("address")}
           </Label>
           <Controller
             control={control}

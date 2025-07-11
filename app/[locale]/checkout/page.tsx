@@ -6,17 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { IUser } from "@/types/user/IUser";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import DialogDetailsCheckout from "./DialogDetailsCheckout";
 import { useRouter } from "@/i18n/navigation";
 import { useCart } from "@/hooks/useCart";
-import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
+import { useAppSelector } from "@/redux/hooksRedux";
 import { useLocale, useTranslations } from "next-intl";
 import {
   CheckOnDiscountCodeApi,
@@ -24,11 +17,16 @@ import {
 } from "@/services/orders/orders";
 import { Loader } from "lucide-react";
 import { toast } from "sonner";
-import { fetchCity } from "@/redux/features/citySlice";
+import CustomSelect from "@/components/ui/CustomSelect";
 import { formatCurrency } from "@/lib/formCurrency";
+
 export default function Checkout() {
-  const {  cart, totalPriceWithDiscount, totalPriceWithOutDiscount } =
-    useCart();
+  const {
+    cart,
+    totalPriceWithDiscount,
+    totalPriceWithOutDiscount,
+    initialized,
+  } = useCart();
   const t = useTranslations("order");
   const [openDialog, setOpenDialog] = useState(false);
   const [code, setCode] = useState<string>("");
@@ -43,7 +41,6 @@ export default function Checkout() {
   const city = useAppSelector((state) => state?.city);
   const user = useAppSelector((state) => state?.user);
   const locale = useLocale();
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -56,35 +53,25 @@ export default function Checkout() {
     handleSubmit,
     getValues,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<IUser>({
     defaultValues: {
-      userName: "",
+      fullName: "",
       phoneNumber: "",
       phoneNumber2: "",
-      city: "",
+      cityId: "",
       address: "",
     },
   });
-   useEffect(() => {
-      setValue("email", user?.data?.email);
-      setValue("userName", user?.data?.userName);
-      setValue("phoneNumber", user?.data?.phoneNumber);
-      setValue("phoneNumber2", user?.data?.phoneNumber2);
-      setValue("cityId", String(user?.data?.cityId));
-      setValue("address", user?.data?.address);
-    }, [
-      setValue,
-      user?.data?.address,
-      user?.data?.cityId,
-      user?.data?.email,
-      user?.data?.phoneNumber,
-      user?.data?.phoneNumber2,
-      user?.data?.userName,
-      city,
-      locale,
-   ]);
-  
+  useEffect(() => {
+    setValue("email", user?.data?.email);
+    setValue("fullName", user?.data?.fullName);
+    setValue("phoneNumber", user?.data?.phoneNumber);
+    setValue("phoneNumber2", user?.data?.phoneNumber2);
+    setValue("cityId", String(user?.data?.cityId));
+    setValue("address", user?.data?.address);
+  }, [setValue, user?.data, city, locale]);
+
   const checkOnCodeDiscount = async () => {
     setLoadingCode(true);
     const response = await CheckOnDiscountCodeApi(code, user?.data?.id);
@@ -106,7 +93,6 @@ export default function Checkout() {
   };
 
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    console.log(data);
     const delivaryCity = city?.data?.find(
       (e) => e?.id === Number(data?.cityId)
     );
@@ -156,16 +142,19 @@ export default function Checkout() {
       address: data?.address ?? "",
       status: "New",
       priceDelivery: delivaryCity?.deliver ?? 0,
-      totalPriceWithDiscound: totalPriceWithDiscount,
-      totalPriceWithOutDiscound: totalPriceWithOutDiscount,
+      totalPriceWithDiscound:
+        totalPriceWithDiscount + (delivaryCity?.deliver || 0),
+      totalPriceWithOutDiscound:
+        totalPriceWithOutDiscount + (delivaryCity?.deliver || 0),
       discoundCodeId: codeResult?.codeId ? codeResult?.codeId : null,
       discoundCodePercent: codeResult?.codePercentage
         ? codeResult?.codePercentage
         : null,
       discoundCode: codeResult?.codeName ? codeResult?.codeName : null,
       totalPriceWithDiscoundCode: codeResult?.codePercentage
-        ? totalPriceWithOutDiscount * (1 - codeResult.codePercentage / 100)
-        : totalPriceWithOutDiscount,
+        ? totalPriceWithDiscount * (1 - codeResult.codePercentage / 100) +
+          (delivaryCity?.deliver || 0)
+        : null,
       dateAdd: new Date().toISOString(),
       dateUpdate: new Date().toISOString(),
       userUpdate: "",
@@ -182,20 +171,11 @@ export default function Checkout() {
     console.log(response);
     setLoadingOrder(false);
   };
-  // protected route
   useEffect(() => {
-    if (!user?.data?.id || cart?.length === 0) {
+    if (initialized === true && cart.length === 0) {
       router.replace("/");
     }
-  }, [user, cart, router]);
-
-  // fetch city
-  useEffect(() => {
-    if (city?.status === "idle") {
-      dispatch(fetchCity());
-    }
-  }, [city?.status, dispatch]);
-
+  });
   return (
     <>
       <form
@@ -210,7 +190,7 @@ export default function Checkout() {
             </Label>
             <Controller
               control={control}
-              name="userName"
+              name="fullName"
               rules={{ required: t("nameRequired") }}
               render={({ field }) => (
                 <Input
@@ -218,6 +198,7 @@ export default function Checkout() {
                   type="text"
                   className="py-5"
                   {...field}
+                  value={field.value ?? ""}
                 />
               )}
             />
@@ -280,35 +261,31 @@ export default function Checkout() {
             <Controller
               control={control}
               name="cityId"
-              rules={{ required: t("cityRequired") }}
               render={({ field }) => (
-                <Select
-                  onValueChange={field.onChange}
-                  value={
-                    field.value !== undefined && field.value !== null
-                      ? String(field.value)
-                      : ""
+                <CustomSelect
+                  {...field}
+                  placeholder={t("enterCity")}
+                  options={
+                    city?.data
+                      ?.filter((city) => city.isShow)
+                      .map((city) => ({
+                        value: String(city.id),
+                        label:
+                          locale === "ar"
+                            ? city.cityNameAr +
+                              " - " +
+                              formatCurrency(city.deliver)
+                            : locale === "en"
+                            ? city.cityNameEng +
+                              " - " +
+                              formatCurrency(city.deliver)
+                            : city.cityNameAbree +
+                              " - " +
+                              formatCurrency(city.deliver),
+                      })) || []
                   }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t("enterCity")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {city?.data
-                      ?.filter((city) => city.isShow === true)
-                      .map((city) => (
-                        <SelectItem key={city.id} value={String(city.id)}>
-                          {city[
-                            locale === "ar"
-                              ? "cityNameAr"
-                              : locale === "en"
-                              ? "cityNameEng"
-                              : "cityNameAbree"
-                          ] + ` - ${formatCurrency(city.deliver)}`}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
+                  value={field.value ?? ""}
+                />
               )}
             />
             {errors.cityId && (
@@ -368,13 +345,11 @@ export default function Checkout() {
               )}
             </div>
           </div>{" "}
-          {isValid && (
-            <div className="w-full" onClick={handleOpenDialog}>
-              <h6 className="text-blue-400 text-xs cursor-pointer">
-                {t("detailsCheckout")}
-              </h6>
-            </div>
-          )}
+          <div className="w-full" onClick={handleOpenDialog}>
+            <h6 className="text-blue-400 text-xs cursor-pointer">
+              {t("detailsCheckout")}
+            </h6>
+          </div>
           <Button type="submit" className="w-full font-bold cursor-pointer">
             {loadingOrder ? (
               <Loader className="w-5 h-5 animate-spin" />

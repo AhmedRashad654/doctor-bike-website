@@ -30,6 +30,7 @@ type CartContextType = {
   getItemById: (id: string | number, type?: string) => CartItem | undefined;
   clearCart: () => void;
   isInCart: (id: string | number, type?: string) => boolean;
+  initialized: boolean;
   totalItems: number;
   totalPriceWithDiscount: number;
   totalPriceWithOutDiscount: number;
@@ -39,17 +40,21 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [initialized, setInitialized] = useState(false);
   const t = useTranslations("context");
   useEffect(() => {
     const stored = localStorage.getItem("cart");
     if (stored) {
       setCart(JSON.parse(stored));
     }
+    setInitialized(true);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    if (initialized) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart, initialized]);
 
   const addToCart = (item: Omit<CartItem, "quantity" | "quantityForColor">) => {
     setCart((prev) => {
@@ -59,7 +64,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         return [...prev, { ...item, quantity: 0, quantityForColor: 1 }];
       }
     });
-    toast.info("addProductToCartSuccess");
+    toast.info(t("addProductToCartSuccess"));
   };
 
   const removeFromCart = (id: string | number, type?: string) => {
@@ -202,6 +207,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         totalItems,
         totalPriceWithOutDiscount,
         totalPriceWithDiscount,
+        initialized,
       }}
     >
       {children}

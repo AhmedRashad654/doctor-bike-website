@@ -159,20 +159,22 @@
     "status": "Status",
     "cancelOrder": "Cancel Order",
     "orderCanceledSuccessfully": "Order canceled successfully",
-    "errorOccurDuringEditOrder": "An error occurred while editing the order"
+    "errorOccurDuringEditOrder": "An error occurred while editing the order",
+    "cartEmpty": "Your cart is empty"
   },
   "cart": {
     "cart": "Shopping Cart",
     "totalItems": "Total Items",
     "totalPrice": "Total Price",
-    "totalPriceAfterDiscount":"total price after discount",
+    "totalPriceAfterDiscount": "total price after discount",
     "priceWithOutDilivary": "Price without delivery",
     "remove": "Remove",
     "goToCheckout": "Go to Checkout",
     "item": "Item",
     "discount": "discount",
     "youMustLogin": "you must login",
-    "checkCodeDiscount": "ckeck"
+    "checkCodeDiscount": "ckeck",
+    "totalPriceAfterCodeDiscount": "Total price after discount and code discount"
   },
   "about": {
     "title": "About Us",

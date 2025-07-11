@@ -50,18 +50,18 @@ export default function CartPage() {
               "min-h-[200px] bg-card rounded-lg flex flex-col gap-2 p-3"
             )}
           >
-            {/* {item?.discount > 0 && ( */}
-            <div className="flex flex-end">
-              <p
-                className={cn(
-                  "bg-link-active dark:bg-link-active/20 w-[110px] h-[25px] text-center p-1 text-white font-bold text-xs",
-                  locale === "ar" ? "rounded-l-full" : "rounded-r-full"
-                )}
-              >
-                {item?.discount} {t("discount")}
-              </p>
-            </div>
-            {/* )} */}
+            {item?.discount > 0 && (
+              <div className="flex flex-end">
+                <p
+                  className={cn(
+                    "bg-link-active dark:bg-link-active/20 w-[110px] h-[25px] text-center p-1 text-white font-bold text-xs",
+                    locale === "ar" ? "rounded-l-full" : "rounded-r-full"
+                  )}
+                >
+                  {item?.discount} {t("discount")}
+                </p>
+              </div>
+            )}
             <div className="flex justify-center items-center max-h-[120px] w-full">
               <Image
                 src={`${url}${item?.image}` || ""}

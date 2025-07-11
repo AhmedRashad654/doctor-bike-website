@@ -20,7 +20,7 @@ export interface IUser {
   accessFailedCount: number;
   address: string | null;
   block: boolean;
-  fullName: string | null;
+  fullName: string;
   phoneNumber2: string | null;
   typeUser: string | null;
   dateAdd: string;

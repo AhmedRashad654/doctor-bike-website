@@ -159,7 +159,8 @@
     "status": "סטטוס",
     "cancelOrder": "ביטול הזמנה",
     "orderCanceledSuccessfully": "ההזמנה בוטלה בהצלחה",
-    "errorOccurDuringEditOrder": "קרה שגיאה בעת עריכת ההזמנה"
+    "errorOccurDuringEditOrder": "קרה שגיאה בעת עריכת ההזמנה",
+    "cartEmpty": "Your cart is empty"
   },
   "cart": {
     "cart": "עגלה",
@@ -171,7 +172,8 @@
     "item": "פריט",
     "discount": "הנחה",
     "youMustLogin": "עליך להתחבר תחילה.",
-    "totalPriceAfterDiscount": "מחיר כולל לאחרהנחה"
+    "totalPriceAfterDiscount": "מחיר כולל לאחרהנחה",
+    "totalPriceAfterCodeDiscount": "מחיר כולל לאחרהנחה וקוד הנחה"
   },
   "about": {
     "title": "אודותינו",

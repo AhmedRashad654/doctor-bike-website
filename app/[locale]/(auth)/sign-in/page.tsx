@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,15 +7,14 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/navigation";
 import { IUser } from "@/types/user/IUser";
-import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
+import { useAppDispatch } from "@/redux/hooksRedux";
 import { LoginUser } from "@/services/auth/auth";
 import { setUser } from "@/redux/features/userSlice";
 import { useTranslations } from "next-intl";
 export default function Login() {
-  const user = useAppSelector((state) => state?.user?.data);
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const t = useTranslations("auth");
+  const router = useRouter();
   // handle login
   const {
     control,
@@ -31,14 +30,9 @@ export default function Login() {
     const response = await LoginUser(data, toast);
     if (response) {
       dispatch(setUser(response?.data?.user));
-    }
-  };
-  // protected Routed
-  useEffect(() => {
-    if (user?.id !== "") {
       router.replace("/");
     }
-  }, [router, user?.id]);
+  };
 
   return (
     <form

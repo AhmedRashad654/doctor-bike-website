@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,14 +8,13 @@ import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/navigation";
 import { IUser } from "@/types/user/IUser";
 import { ForgetPasswordUser } from "@/services/auth/auth";
-import { useAppDispatch, useAppSelector } from "@/redux/hooksRedux";
+import { useAppDispatch } from "@/redux/hooksRedux";
 import { setOTP } from "@/redux/features/userSlice";
 import { useTranslations } from "next-intl";
 
 export default function ForgetPassword() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state?.user?.data);
   const t = useTranslations("auth");
   const {
     control,
@@ -34,12 +33,6 @@ export default function ForgetPassword() {
       router.push("/otp");
     }
   };
-  // protected Routed
-  useEffect(() => {
-    if (user?.id !== "") {
-      router.replace("/");
-    }
-  }, [router, user?.id]);
 
   return (
     <form

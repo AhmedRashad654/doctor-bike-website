@@ -159,20 +159,21 @@
     "status": "الحالة",
     "cancelOrder": "إلغاء الطلب",
     "orderCanceledSuccessfully": "تم إلغاء الطلب بنجاح",
-    "errorOccurDuringEditOrder": "حدث خطأ اثناء تحديث حالة الطلب"
+    "errorOccurDuringEditOrder": "حدث خطأ اثناء تحديث حالة الطلب",
+    "cartEmpty": "عربة التسوق فارغة"
   },
   "cart": {
     "cart": "عربة التسوق",
     "totalItems": "إجمالي العناصر",
     "totalPrice": "السعر الإجمالي",
-    "totalPriceAfterDiscount":"السعر الاجمالي بعد الخصم ",
+    "totalPriceAfterDiscount": "السعر الاجمالي بعد الخصم ",
     "priceWithOutDilivary": "السعر بدون التوصيل",
     "remove": "حذف",
     "goToCheckout": "الذهاب للدفع",
     "item": "عنصر",
     "discount": "خصم",
-    "youMustLogin":"يجب عليك تسجيل الدخول اولا"
-
+    "youMustLogin": "يجب عليك تسجيل الدخول اولا",
+    "totalPriceAfterCodeDiscount": "السعر الاجمالي بعد الخصم وكود الخصم"
   },
   "about": {
     "title": "من نحن ",

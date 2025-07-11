@@ -1,20 +1,16 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-// import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-// import { setUser } from "../../../redux/features/userSlice";
 import { Link } from "@/i18n/navigation";
 import { IUser } from "@/types/user/IUser";
-import { useAppSelector } from "@/redux/hooksRedux";
 import { useRouter } from "next/navigation";
 import { RegisterUser } from "@/services/auth/auth";
 import { useTranslations } from "next-intl";
 export default function Register() {
-  const user = useAppSelector((state) => state?.user?.data);
   const router = useRouter();
   const t = useTranslations("auth");
   // handle login
@@ -38,12 +34,6 @@ export default function Register() {
       router.push("/sign-in");
     }
   };
-  // protected Routed
-  useEffect(() => {
-    if (user?.id !== "") {
-      router.replace("/");
-    }
-  }, [router, user?.id]);
 
   return (
     <form

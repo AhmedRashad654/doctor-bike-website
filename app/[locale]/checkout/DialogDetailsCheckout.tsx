@@ -6,9 +6,10 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/hooks/useCart";
+import { formatCurrency } from "@/lib/formCurrency";
 import { ICity } from "@/types/city/ICity";
 import { IUser } from "@/types/user/IUser";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { UseFormGetValues } from "react-hook-form";
 export default function DialogDetailsCheckout({
   open,
@@ -33,14 +34,15 @@ export default function DialogDetailsCheckout({
   const t2 = useTranslations("cart");
 
   const delivaryCity = city?.find((e) => String(e?.id) === getValues("cityId"));
+  const locale = useLocale();
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="md:max-w-[550px]">
         <DialogHeader>
           <DialogTitle className="text-center mb-2">
             {t("detailsCheckout")}
           </DialogTitle>
-          <div className="flex flex-col gap-3 px-0 md:px-4 text-muted-foreground text-sm">
+          <div className="flex flex-col gap-3 px-0 md:px-2 text-muted-foreground text-sm">
             <div className="flex items-center gap-1">
               <span> {t("name")} :</span>
               <span> {getValues("userName")} </span>
@@ -55,7 +57,13 @@ export default function DialogDetailsCheckout({
             </div>
             <div className="flex items-center gap-1">
               <span> {t("city")} :</span>
-              <span> {getValues("city")} </span>
+              <span>
+                {locale === "ar"
+                  ? delivaryCity?.cityNameAr
+                  : locale === "en"
+                  ? delivaryCity?.cityNameEng
+                  : delivaryCity?.cityNameAbree}
+              </span>
             </div>
             <div className="flex items-center gap-1">
               <span> {t("address")} :</span>
@@ -74,29 +82,64 @@ export default function DialogDetailsCheckout({
             </div>
             <div className="flex items-center justify-between">
               <span> {t("dliveryPrice")}</span>
-              <span>{delivaryCity?.deliver}</span>
+              <span>
+                {delivaryCity && formatCurrency(delivaryCity?.deliver)}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span>
                 {" "}
                 {t2("totalPrice")}
-                <span> </span>( {t("afterDlivery")})
+                <span> </span>( {t("afterDlivery")} )
               </span>
               <span>
                 {delivaryCity
-                  ? totalPriceWithOutDiscount + delivaryCity?.deliver
+                  ? formatCurrency(
+                      totalPriceWithOutDiscount + delivaryCity?.deliver
+                    )
                   : totalPriceWithOutDiscount}
               </span>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="whitespace-nowrap">
-                {" "}
-                {t2("totalPriceAfterDiscount")}( {t("afterDlivery")})
-              </span>
+            <div className="flex items-center gap-1 justify-between flex-wrap">
+              <div className="flex items-center gap-1 flex-wrap">
+                <span className="whitespace-nowrap">
+                  {" "}
+                  {t2("totalPriceAfterDiscount")}
+                </span>
+                <span className="whitespace-nowrap">
+                  {" "}
+                  ( {t("afterDlivery")} )
+                </span>
+              </div>
+
               <span>
                 {delivaryCity
-                  ? totalPriceWithDiscount + delivaryCity?.deliver
-                  : totalPriceWithDiscount}
+                  ? formatCurrency(
+                      totalPriceWithDiscount + delivaryCity?.deliver
+                    )
+                  : formatCurrency(totalPriceWithDiscount)}
+              </span>
+            </div>
+            <div className="flex items-center gap-1 flex-wrap justify-between">
+              <div className="flex items-center gap-1 flex-wrap">
+                <span className="whitespace-nowrap ">
+                  {" "}
+                  {t2("totalPriceAfterCodeDiscount")}
+                </span>
+                <span className="whitespace-nowrap ">
+                  {" "}
+                  ( {t("afterDlivery")} )
+                </span>
+              </div>
+
+              <span>
+                {codeResult?.codePercentage
+                  ? formatCurrency(
+                      totalPriceWithDiscount *
+                        (1 - codeResult.codePercentage / 100) +
+                        (delivaryCity?.deliver || 0)
+                    )
+                  : ""}
               </span>
             </div>
           </div>

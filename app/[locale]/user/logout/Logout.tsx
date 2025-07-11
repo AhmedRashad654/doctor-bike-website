@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/redux/hooksRedux";
 import { setLogout } from "@/redux/features/userSlice";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 
 export default function Logout() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const t = useTranslations("auth");
   const handleLogout = () => {
     dispatch(setLogout());
+    router.replace("/sign-in");
   };
 
   return (
