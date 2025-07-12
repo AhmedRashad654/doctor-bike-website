@@ -125,13 +125,12 @@
   --hero-text: #ffffff;
   --section-header: #d4d9e8;
   --transperants: #111827;
-  --card: oklch(18.168% 0.03632 267.996)
-  ;
+  --card: oklch(18.168% 0.03632 267.996);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50 ;
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground overflow-x-hidden;
@@ -144,7 +143,6 @@ html.ltr {
 html.rtl {
   direction: rtl;
 }
-
 /* .shadow-button-footer {
   box-shadow: 2px -2px 41px 38px rgba(230, 229, 229, 0.41);
 } */

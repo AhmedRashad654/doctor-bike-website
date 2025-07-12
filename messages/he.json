@@ -15,7 +15,12 @@
       "category": "קטגוריות",
       "english": "אנגלית",
       "arabic": "ערבית",
-      "hebrew": "עברית"
+      "hebrew": "עברית",
+      "searchnProduct": "חפש מוצר",
+      "name": "שם",
+      "minPrice": "מחיר מינימלי",
+      "maxPrice": "מחיר מקסימלי",
+      "clearFilters": "נקה מסננים"
     },
     "mainCategory": {
       "category": "קטגוריות"
@@ -105,7 +110,13 @@
     "yes": "כן",
     "cancel": "ביטול",
     "logout": "התנתק",
-    "informationPersonal": "  פרטי אישי"
+    "informationPersonal": "  פרטי אישי",
+    "registerSuccessfully": "ההרשמה בוצעה בהצלחה",
+    "loginSuccessfully": "התחברת בהצלחה",
+    "accountBlocked": "החשבון חסום",
+    "sendedOtPToYourEmail": "קוד האימות נשלח לדוא\"ל שלך",
+    "changePasswordSuccessfully": "הסיסמה שונתה בהצלחה",
+    "updateProfileSuccessfully": "הפרופיל עודכן בהצלחה"
   },
   "order": {
     "myOrders": "ההזמנות שלי",

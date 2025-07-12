@@ -15,7 +15,12 @@
       "category": "Categories",
       "english": "English",
       "arabic": "Arabic",
-      "hebrew": "Hebrew"
+      "hebrew": "Hebrew",
+      "searchnProduct": "Search Product",
+      "name": "Name",
+      "minPrice": "Minimum Price",
+      "maxPrice": "Maximum Price",
+      "clearFilters": "Clear Filters"
     },
     "mainCategory": {
       "category": "Categories"
@@ -105,7 +110,13 @@
     "yes": "Yes",
     "cancel": "Cancel",
     "logout": "logout",
-    "informationPersonal": "Personal Information"
+    "informationPersonal": "Personal Information",
+    "registerSuccessfully": "Registered successfully",
+    "loginSuccessfully": "Logged in successfully",
+    "accountBlocked": "Account is blocked",
+    "sendedOtPToYourEmail": "OTP has been sent to your email",
+    "changePasswordSuccessfully": "Password changed successfully",
+    "updateProfileSuccessfully": "Profile updated successfully"
   },
   "order": {
     "myOrders": "My Orders",

@@ -37,7 +37,7 @@ export default function ChangePassword() {
       userId: userOTP?.userId,
       dateUpdate: new Date(),
     };
-    const response = await ChangePasswordUserApi(newData as IUser, toast);
+    const response = await ChangePasswordUserApi(newData as IUser, toast,t);
     if (response?.status === 200) {
       isSuccess.current = true;
       dispatch(setResetOTP());

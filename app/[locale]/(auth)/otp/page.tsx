@@ -38,7 +38,7 @@ export default function Otp() {
   // handle repeat send otp
   const handleRepeatSendOTP = async () => {
     const data = { email: userOTP?.email };
-    const response = await ForgetPasswordUser(data as IUser, toast);
+    const response = await ForgetPasswordUser(data as IUser, toast,t);
     if (response) {
       dispatch(setOTP(response?.data));
       setTimeLeft(60);

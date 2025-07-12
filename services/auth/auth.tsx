@@ -3,10 +3,15 @@ import { request } from "../../axios/axios";
 import Cookies from "js-cookie";
 import { IUser } from "@/types/user/IUser";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 type ToastType = typeof toast;
-
+type TFunctionType = ReturnType<typeof useTranslations>;
 // register user
-export const RegisterUser = async (data: IUser, toast: ToastType) => {
+export const RegisterUser = async (
+  data: IUser,
+  toast: ToastType,
+  t: TFunctionType
+) => {
   try {
     const response = await request.post(`/Users/Register`, {
       email: data.email,
@@ -16,7 +21,7 @@ export const RegisterUser = async (data: IUser, toast: ToastType) => {
       dateUpdate: new Date().toISOString(),
     });
     if (response?.status === 200) {
-      toast.success("تم انشاء حساب بنجاح");
+      toast.success(t("registerSuccessfully"));
       return response;
     }
   } catch (error: unknown) {
@@ -27,7 +32,7 @@ export const RegisterUser = async (data: IUser, toast: ToastType) => {
 };
 
 // login user
-export const LoginUser = async (data: IUser, toast: ToastType) => {
+export const LoginUser = async (data: IUser, toast: ToastType, t: TFunctionType) => {
   try {
     const response = await request.post(`/Auth/login`, {
       email: data.email,
@@ -35,14 +40,14 @@ export const LoginUser = async (data: IUser, toast: ToastType) => {
     });
     if (response?.status === 200) {
       if (response?.data?.block === true) {
-        toast.error("هذا الحساب محظور");
+        toast.error(t("accountBlocked"));
         return null;
       }
 
       Cookies.set("token_doctor_bike_website", response?.data.token, {
         expires: 7,
       });
-      toast.success("تم تسجيل الدخول بنجاح");
+      toast.success(t("loginSuccessfully"));
       return response;
     }
   } catch (error: unknown) {
@@ -53,13 +58,17 @@ export const LoginUser = async (data: IUser, toast: ToastType) => {
 };
 
 //forget password
-export const ForgetPasswordUser = async (data: IUser, toast: ToastType) => {
+export const ForgetPasswordUser = async (
+  data: IUser,
+  toast: ToastType,
+  t: TFunctionType
+) => {
   try {
     const response = await request.post(
       `/Auth/ForgotPassword?Email=${data?.email}`
     );
     if (response?.status === 200) {
-      toast.success("تم ارسال رمز OTP الي الايميل الخاص بك");
+      toast.success(t("sendedOtPToYourEmail"));
       return response;
     }
   } catch (error: unknown) {
@@ -72,7 +81,8 @@ export const ForgetPasswordUser = async (data: IUser, toast: ToastType) => {
 // change password
 export const ChangePasswordUserApi = async (
   newData: IUser,
-  toast: ToastType
+  toast: ToastType,
+  t: TFunctionType
 ) => {
   try {
     const response = await request.patch(
@@ -80,7 +90,7 @@ export const ChangePasswordUserApi = async (
       newData
     );
     if (response?.status === 200) {
-      toast.success("تم تغيير كلمة المرور بنجاح");
+      toast.success(t("changePasswordSuccessfully"));
       return response;
     } else {
       return null;
@@ -93,11 +103,15 @@ export const ChangePasswordUserApi = async (
 };
 
 // update profile user
-export const UpdateProfileUser = async (newData: IUser, toast: ToastType) => {
+export const UpdateProfileUser = async (
+  newData: IUser,
+  toast: ToastType,
+  t: TFunctionType
+) => {
   try {
     const response = await request.post(`/Users/Edit`, newData);
     if (response?.status === 200) {
-      toast.success("تم   تحديث الملف الشخصي بنجاح");
+      toast.success(t("updateProfileSuccessfully"));
       return response;
     } else {
       return null;
@@ -112,12 +126,13 @@ export const UpdateProfileUser = async (newData: IUser, toast: ToastType) => {
 // change password user login
 export const ChangePasswordUserLoginApi = async (
   newData: IUser,
-  toast: ToastType
+  toast: ToastType,
+  t: TFunctionType
 ) => {
   try {
     const response = await request.post(`/Auth/ChangePassword`, newData);
     if (response?.status === 200) {
-      toast.success("تم تغيير كلمة المرور بنجاح");
+      toast.success(t("changePasswordSuccessfully"));
       return response;
     } else {
       return null;

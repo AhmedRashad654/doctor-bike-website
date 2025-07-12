@@ -32,7 +32,7 @@ export default function ChangePasswordUserLogin() {
       userId: user?.id,
       dateUpdate: new Date().toISOString(),
     };
-    const response = await ChangePasswordUserLoginApi(newDate, toast);
+    const response = await ChangePasswordUserLoginApi(newDate, toast, t);
     if (response?.status === 200) {
       reset();
     }

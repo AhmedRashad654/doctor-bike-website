@@ -29,7 +29,7 @@ export default function Register() {
 
   const password = watch("password");
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    const response = await RegisterUser(data, toast);
+    const response = await RegisterUser(data, toast,t);
     if (response?.status === 200) {
       router.push("/sign-in");
     }

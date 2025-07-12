@@ -53,7 +53,7 @@ export default function DataUserUpdate() {
       cityId: Number(data?.cityId) ?? null,
       dateUpdate: new Date().toISOString(),
     };
-    const response = await UpdateProfileUser(newDate, toast);
+    const response = await UpdateProfileUser(newDate, toast,t);
     if (response) {
       dispatch(setUser(response?.data));
     }

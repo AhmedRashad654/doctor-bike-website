@@ -27,7 +27,7 @@ export default function Login() {
     },
   });
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    const response = await LoginUser(data, toast);
+    const response = await LoginUser(data, toast,t);
     if (response) {
       dispatch(setUser(response?.data?.user));
       router.replace("/");

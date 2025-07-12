@@ -10,7 +10,7 @@ export default async function MainCategory() {
   const data = await GetMainCategory();
 
   return (
-    <div className="w-full">
+    <div className="w-full" id="category">
       <div className="px-6">
         <div className="max-w-7xl mx-auto flex flex-col gap-7 items-center">
           <div className="relative z-20">

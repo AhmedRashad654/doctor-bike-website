@@ -15,7 +15,12 @@
       "category": " الاقسام",
       "english": "الانجليزية",
       "arabic": "العربية",
-      "hebrew": "العبرية"
+      "hebrew": "العبرية",
+      "searchnProduct": "بحث عن منتج",
+      "name": "الاسم",
+      "minPrice": "أقل سعر",
+      "maxPrice": "أعلى سعر",
+      "clearFilters": "مسح الفلاتر"
     },
     "mainCategory": {
       "category": "الاقسام"
@@ -105,7 +110,13 @@
     "yes": "نعم",
     "cancel": "إلغاء",
     "logout": "تسجيل الخروج",
-    "informationPersonal": "  البيانات الشخصية"
+    "informationPersonal": "  البيانات الشخصية",
+    "registerSuccessfully": "تم التسجيل بنجاح",
+    "loginSuccessfully": "تم تسجيل الدخول بنجاح",
+    "accountBlocked": "تم حظر الحساب",
+    "sendedOtPToYourEmail": "تم إرسال رمز التحقق إلى بريدك الإلكتروني",
+    "changePasswordSuccessfully": "تم تغيير كلمة المرور بنجاح",
+    "updateProfileSuccessfully": "تم تحديث الملف الشخصي بنجاح"
   },
   "order": {
     "myOrders": "طلباتي",

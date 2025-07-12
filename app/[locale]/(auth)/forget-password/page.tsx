@@ -27,7 +27,7 @@ export default function ForgetPassword() {
     },
   });
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    const response = await ForgetPasswordUser(data, toast);
+    const response = await ForgetPasswordUser(data, toast,t);
     if (response) {
       dispatch(setOTP(response?.data));
       router.push("/otp");
