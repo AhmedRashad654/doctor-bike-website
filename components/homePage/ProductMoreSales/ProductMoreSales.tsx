@@ -19,7 +19,7 @@ export default async function ProductMoreSales({
         <div className="max-w-7xl mx-auto flex flex-col gap-7 items-center">
           <div className="relative">
             <h4 className="text-2xl md:text-3xl lg:text-4xl font-bold text-section-header">
-              {t("moreSales")}
+              {t("moreSales")} 
             </h4>
             <div className="absolute bg-link-active/20 w-[150px] h-[20px] -z-10 bottom-0 top-1/2 left-0"></div>
           </div>

@@ -41,6 +41,11 @@
     "advertisements": {
       "title": "Advertisements",
       "visitAd": "Visit Advertisement"
+    },
+    "productFromSearch": {
+      "resultSearch": "Search Results",
+      "clearSearch": "clear Search",
+      "notFoundProductForName": "No Found Product With Name"
     }
   },
   "singleProduct": {

@@ -19,7 +19,7 @@ export default function ButtonPagination({
     if (Number(newPage) > 0 && newPage <= Number(totalPages)) {
       const params = new URLSearchParams(searchParams.toString());
       params.set("page", newPage.toString());
-      router.push(`${pathname}?${params.toString()}`);
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
     }
   };
 

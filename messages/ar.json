@@ -41,6 +41,11 @@
       "about": "من نحن",
       "terms": "الشروط والاحكام",
       "provideNow": "متوفر الان تطبيق للشركة "
+    },
+    "productFromSearch":{
+      "resultSearch":"نتيجة البحث",
+      "clearSearch":"مسح البحث",
+      "notFoundProductForName":"لا يوجد منتجات باسم"
     }
   },
   "singleProduct": {

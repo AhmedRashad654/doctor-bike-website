@@ -41,6 +41,11 @@
     "advertisements": {
       "title": " פרסומות",
       "visitAd": "צפה במודעה"
+    },
+    "productFromSearch": {
+      "resultSearch": "תוצאות חיפוש",
+      "clearSearch": "נקה חיפוש",
+      "notFoundProductForName": "אין מוצרים בעלי שם"
     }
   },
   "singleProduct": {

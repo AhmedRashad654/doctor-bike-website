@@ -49,12 +49,12 @@ export default function Navbar() {
         smooth: "easeInOutQuart",
         offset: -130,
       });
+      setTimeout(() => {
+        router.replace(pathname, {
+          scroll: false,
+        });
+      }, 300);
     }
-    setTimeout(() => {
-      router.replace(pathname, {
-        scroll: false,
-      });
-    }, 300);
   }, [pathname, router, scrollTo]);
 
   return (

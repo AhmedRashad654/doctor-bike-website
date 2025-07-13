@@ -28,7 +28,7 @@ export default function ModalSearchProduct({
     } else {
       params.delete(key);
     }
-    router.replace(`${pathname}?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const clearFilters = () => {
@@ -38,7 +38,7 @@ export default function ModalSearchProduct({
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <DialogContent className="w-[350px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-card p-6 rounded-md z-50">
+      <DialogContent className="w-[350px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-card p-6 rounded-md z-[99999]">
         <DialogHeader>
           <DialogTitle className="text-center w-full">
             {t("searchnProduct")}
@@ -60,7 +60,7 @@ export default function ModalSearchProduct({
               className="border border-gray-400"
             />
           </div>
-          <div className="flex flex-col gap-3">
+          {/* <div className="flex flex-col gap-3">
             <Label>{t("minPrice")}</Label>
             <Input
               name="minPrice"
@@ -79,7 +79,7 @@ export default function ModalSearchProduct({
               onChange={(e) => updateQuery("maxPrice", e.target.value)}
               className="border border-gray-400"
             />
-          </div>
+          </div> */}
           <button
             onClick={clearFilters}
             className="bg-red-500 text-white py-2 rounded hover:bg-red-600 transition cursor-pointer"
