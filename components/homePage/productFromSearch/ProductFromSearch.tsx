@@ -71,7 +71,11 @@ export default function ProductFromSearch() {
               {products?.rows
                 ?.filter((e: IProduct) => e?.isShow === true)
                 .map((product: IProduct) => (
-                  <CardProduct key={product.id} product={product} />
+                  <CardProduct
+                    key={product.id}
+                    product={product}
+                    type={"sub"}
+                  />
                 ))}
             </div>
           )}
