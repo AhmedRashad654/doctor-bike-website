@@ -1,62 +1,46 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { UserRound } from "lucide-react";
 import { ToggleTheme } from "@/components/theme/ToggleTheme";
 import LanguageSwitcher from "@/components/language/LanguageSwitcher";
 import LogoImage from "./LogoImage";
 import { House } from "lucide-react";
 import { ChartBarStacked } from "lucide-react";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import PartIconCartAndLength from "./PartIconCartAndLength";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useAppSelector } from "@/redux/hooksRedux";
 import { FaBorderStyle } from "react-icons/fa";
-import { Search } from "lucide-react";
-import ModalSearchProduct from "./ModalSearchProduct";
-import { scroller } from "react-scroll";
-import { useSearchParams } from "next/navigation";
+import InputSearch from "./InputSearch";
 
 export default function Navbar() {
   const t = useTranslations("home.navbar");
-  const router = useRouter();
   const user = useAppSelector((state) => state?.user?.data);
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openInputSearch, setOpenInputSearch] = useState(false);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const scrollTo = searchParams.get("scrollTo");
   const isRootLocaleOnly = pathname === "/";
-  ///////////function handleScrollTo//////////////
-  function handleScrollTo(sectionTo: string) {
-    if (pathname === "/") {
-      scroller.scrollTo(sectionTo, {
-        duration: 800,
-        delay: 0,
-        smooth: "easeInOutQuart",
-        offset: -130,
-      });
-    } else {
-      router.push(`/?scrollTo=${sectionTo}`);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      setIsMobile(true);
     }
-  }
+  }, []);
 
   useEffect(() => {
-    if (scrollTo) {
-      scroller.scrollTo(scrollTo, {
-        duration: 800,
-        delay: 0,
-        smooth: "easeInOutQuart",
-        offset: -130,
-      });
-      setTimeout(() => {
-        router.replace(pathname, {
-          scroll: false,
-        });
-      }, 300);
-    }
-  }, [pathname, router, scrollTo]);
-
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <>
       <nav
@@ -70,58 +54,66 @@ export default function Navbar() {
           <div className="flex items-center gap-[7px] sm:gap-3 md:gap-5 ">
             <Link
               href={"/"}
-              className="text-lg font-bold text-link-active cursor-pointer hidden md:block hover:text-black dark:hover:text-blue-400"
+              className="text-lg font-bold text-link-active cursor-pointer hidden lg:block hover:text-black dark:hover:text-blue-400"
             >
               {t("home")}
             </Link>
             <Link
               href={"/"}
-              className="block md:hidden cursor-pointer text-link-active hover:text-black"
+              className="block lg:hidden cursor-pointer text-link-active hover:text-black"
             >
               <House className="dark:hover:text-blue-400" />
             </Link>
-            <div
-              className="items-center gap-1 text-link-inactive cursor-pointer hidden md:flex dark:hover:text-blue-400 hover:text-black"
-              onClick={() => handleScrollTo("category")}
-            >
+            <div className="items-center gap-1 text-link-inactive cursor-pointer hidden lg:flex dark:hover:text-blue-400 hover:text-black">
               <h6 className="text-lg font-bold"> {t("category")}</h6>
               <ChevronDown className="mt-1 " />
             </div>
-            <div
-              className="block md:hidden cursor-pointer text-link-active hover:text-black"
-              onClick={() => handleScrollTo("category")}
-            >
+            <div className="block lg:hidden cursor-pointer text-link-active hover:text-black">
               <ChartBarStacked className="dark:hover:text-blue-400" />
             </div>
           </div>
 
           <LogoImage />
-          <div className="flex items-center gap-[7px] sm:gap-3 md:gap-5 text-link-active">
-            <LanguageSwitcher />
-            <ToggleTheme />
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-2 text-link-active">
             <Search
               className={cn(
-                "cursor-pointer w-6 h-6 hover:text-black dark:hover:text-blue-400 transition duration-300",
-                !isRootLocaleOnly && "hidden"
+                "cursor-pointer w-6 h-6 hover:text-black dark:hover:text-blue-400 transition duration-300 block lg:hidden",
+                !isRootLocaleOnly && "hidden",
+                openInputSearch && "hidden"
               )}
-              onClick={() => setOpenDialog(true)}
+              onClick={() => setOpenInputSearch(true)}
             />
-            {user?.id !== "" && (
-              <Link href={"/orders"}>
-                <FaBorderStyle className="cursor-pointer w-5 h-5 hover:text-black dark:hover:text-blue-400 transition duration-300" />
-              </Link>
+            <div
+              className={cn("hidden lg:block", !isRootLocaleOnly && "hidden")}
+            >
+              <InputSearch />
+            </div>
+            {openInputSearch && (
+              <div className={cn("lg:hidden", !isRootLocaleOnly && "hidden")}>
+                <InputSearch setOpenInputSearch={setOpenInputSearch} />
+              </div>
             )}
-            <PartIconCartAndLength />
-            <Link href={user?.id !== "" ? "/user" : "/sign-in"}>
-              <UserRound className="cursor-pointer hover:text-black dark:hover:text-blue-400 transition duration-300" />
-            </Link>
+            <div
+              className={cn(
+                "flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-2",
+                openInputSearch && isMobile && "hidden"
+              )}
+            >
+              <LanguageSwitcher />
+              <ToggleTheme />
+              {user?.id !== "" && (
+                <Link href={"/orders"}>
+                  <FaBorderStyle className="cursor-pointer w-5 h-5 hover:text-black dark:hover:text-blue-400 transition duration-300" />
+                </Link>
+              )}
+              <PartIconCartAndLength />
+              <Link href={user?.id !== "" ? "/user" : "/sign-in"}>
+                <UserRound className="cursor-pointer hover:text-black dark:hover:text-blue-400 transition duration-300" />
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
-      <ModalSearchProduct
-        openDialog={openDialog}
-        setOpenDialog={setOpenDialog}
-      />
     </>
   );
 }

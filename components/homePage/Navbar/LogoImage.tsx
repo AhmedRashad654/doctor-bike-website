@@ -23,7 +23,7 @@ export default function LogoImage() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
       viewport={{ once: true, amount: 0.2 }}
-      className="absolute  left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] bg-transperants rounded-[50%] w-[110px] h-[110px] hidden md:flex  justify-center items-center">
+      className="absolute  left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] bg-transperants rounded-[50%] w-[110px] h-[110px] hidden lg:flex  justify-center items-center">
       <Image
         src={theme === "dark" ? logoDark : logo}
         alt="logo"

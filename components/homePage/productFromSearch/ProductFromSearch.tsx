@@ -45,7 +45,7 @@ export default function ProductFromSearch() {
     router.replace(pathname);
   };
   return (
-    <div className="w-full pb-6 min-h-[300px]">
+    <div className="w-full pb-6 min-h-[300px] py-28 md:py-32">
       <div className="px-6">
         <div className="max-w-7xl mx-auto flex flex-col gap-7 items-center">
           <div className="relative">

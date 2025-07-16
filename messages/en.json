@@ -20,7 +20,8 @@
       "name": "Name",
       "minPrice": "Minimum Price",
       "maxPrice": "Maximum Price",
-      "clearFilters": "Clear Filters"
+      "clearFilters": "Clear Filters",
+      "search":"Search"
     },
     "mainCategory": {
       "category": "Categories"

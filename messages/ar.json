@@ -20,7 +20,8 @@
       "name": "الاسم",
       "minPrice": "أقل سعر",
       "maxPrice": "أعلى سعر",
-      "clearFilters": "مسح الفلاتر"
+      "clearFilters": "مسح الفلاتر",
+      "search": "بحث"
     },
     "mainCategory": {
       "category": "الاقسام"

@@ -16,11 +16,11 @@ export default async function Home({
   const nameProduct = resultSearchParams.name ?? "";
   return (
     <div className="flex flex-col">
-      <HeroSection />
       {nameProduct ? (
         <ProductFromSearch />
       ) : (
         <>
+          <HeroSection />
           <MainCategory />
           <ProductMoreSales page={page} />
           <Advertisements />

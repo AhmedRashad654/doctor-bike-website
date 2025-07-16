@@ -20,7 +20,8 @@
       "name": "שם",
       "minPrice": "מחיר מינימלי",
       "maxPrice": "מחיר מקסימלי",
-      "clearFilters": "נקה מסננים"
+      "clearFilters": "נקה מסננים",
+      "search": "חפש"
     },
     "mainCategory": {
       "category": "קטגוריות"
