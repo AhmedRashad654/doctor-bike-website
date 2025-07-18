@@ -12,7 +12,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { request } from "@/axios/axios";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {  useRouter, useSearchParams } from "next/navigation";
 import { IProduct } from "@/types/product/IProduct";
 
 export default function InputSearch({
@@ -24,7 +24,6 @@ export default function InputSearch({
   const [options, setOptions] = useState<IProduct[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
-  const pathname = usePathname();
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -46,7 +45,7 @@ export default function InputSearch({
             {
               paginationInfo: {
                 pageIndex: 0,
-                pageSize: 1,
+                pageSize: 10,
               },
             }
           );
@@ -60,21 +59,26 @@ export default function InputSearch({
       }
 
       getProducts();
-    }, 500); // debounce delay
+    }, 300); // debounce delay
 
     return () => clearTimeout(delayDebounce);
   }, [searchValue]);
-
   // Handle Item Selection
   const handleSelect = (item: IProduct) => {
     const params = new URLSearchParams(searchParams.toString());
     if (item) {
-      params.set("name", item.nameEng);
+      if (locale === "en") {
+        params.set("name", item.nameEng);
+      } else if (locale === "ar") {
+        params.set("name", item.nameAr);
+      } else {
+        params.set("name", item.nameAbree);
+      }
     } else {
       params.delete("name");
     }
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-      setSearchValue("")
+    router.replace(`/?${params.toString()}`, { scroll: false });
+    setSearchValue("");
   };
 
   return (
@@ -92,7 +96,7 @@ export default function InputSearch({
       />
       <CommandList>
         {!loading && options?.length > 0 && (
-          <CommandGroup className="absolute top-10 left-0 bg-card">
+          <CommandGroup className="absolute top-10 left-0 bg-card max-h-[50vh] overflow-y-auto">
             {options.map((option) => (
               <CommandItem
                 key={option.id}

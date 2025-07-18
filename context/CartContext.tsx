@@ -43,7 +43,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialized, setInitialized] = useState(false);
   const t = useTranslations("context");
   useEffect(() => {
-    const stored = localStorage.getItem("cart");
+    const stored = sessionStorage.getItem("cart");
     if (stored) {
       setCart(JSON.parse(stored));
     }
@@ -52,7 +52,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (initialized) {
-      localStorage.setItem("cart", JSON.stringify(cart));
+      sessionStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart, initialized]);
 
@@ -150,8 +150,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearCart = () => {
     setCart([]);
-    // toast.info("تم مسح عربة التسوق");
-    localStorage.removeItem("cart");
+    sessionStorage.removeItem("cart");
   };
   const isInCart = (id: string | number, type?: string): boolean => {
     if (type && type === "color") {

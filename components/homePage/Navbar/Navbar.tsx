@@ -1,12 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ChevronDown, Search } from "lucide-react";
+import {  Search } from "lucide-react";
 import { UserRound } from "lucide-react";
 import { ToggleTheme } from "@/components/theme/ToggleTheme";
 import LanguageSwitcher from "@/components/language/LanguageSwitcher";
 import LogoImage from "./LogoImage";
 import { House } from "lucide-react";
-import { ChartBarStacked } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import PartIconCartAndLength from "./PartIconCartAndLength";
 import { cn } from "@/lib/utils";
@@ -14,6 +13,7 @@ import { useTranslations } from "next-intl";
 import { useAppSelector } from "@/redux/hooksRedux";
 import { FaBorderStyle } from "react-icons/fa";
 import InputSearch from "./InputSearch";
+import PartCategory from "./PartCategory";
 
 export default function Navbar() {
   const t = useTranslations("home.navbar");
@@ -64,13 +64,7 @@ export default function Navbar() {
             >
               <House className="dark:hover:text-blue-400" />
             </Link>
-            <div className="items-center gap-1 text-link-inactive cursor-pointer hidden lg:flex dark:hover:text-blue-400 hover:text-black">
-              <h6 className="text-lg font-bold"> {t("category")}</h6>
-              <ChevronDown className="mt-1 " />
-            </div>
-            <div className="block lg:hidden cursor-pointer text-link-active hover:text-black">
-              <ChartBarStacked className="dark:hover:text-blue-400" />
-            </div>
+            <PartCategory />
           </div>
 
           <LogoImage />

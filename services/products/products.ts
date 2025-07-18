@@ -31,28 +31,33 @@ export const GetProductsBySubId = async (
 };
 
 export const GetProductMoreSales = async (page: string | string[]) => {
-  const response = await fetch(`${BASE_API_URL}/Items/GetAllItemIsMoreSales`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      listRelatedObjects: ["ViewImgs"],
-      paginationInfo: {
-        pageIndex: page,
-        pageSize: 10,
-      },
-    }),
-    cache: "no-store",
-  });
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `Failed to fetch main category: ${response.status} - ${errorText}`
+  try {
+    const response = await fetch(
+      `${BASE_API_URL}/Items/GetAllItemIsMoreSales`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          listRelatedObjects: ["ViewImgs"],
+          paginationInfo: {
+            pageIndex: page,
+            pageSize: 10,
+          },
+        }),
+        cache: "no-store",
+      }
     );
-  }
-  const data = await response.json();
-  return data;
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to fetch main category: ${response.status} - ${errorText}`
+      );
+    }
+    const data = await response.json();
+    return data;
+  } catch {}
 };
 
 export const GetSingleProduct = async (id: string) => {
@@ -87,5 +92,3 @@ export const GetSingleProduct = async (id: string) => {
   const data = await response.json();
   return data;
 };
-
-

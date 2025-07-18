@@ -97,7 +97,7 @@ export default async function LocaleLayout({
                   <Navbar />
                   {children}
                 </main>
-                <Toaster position="top-center" />
+                <Toaster position="top-center"  richColors/>
               </CartProvider>
             </StoreProvider>
           </NextIntlClientProvider>
